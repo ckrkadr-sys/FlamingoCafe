@@ -1,0 +1,133 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { menu } from '../data/menu';
+import { photo } from '../data/photos';
+
+// The menu as one day on the beach: morning plates first, the last cocktail at midnight.
+const day = [
+  { name: 'Kahvaltı ve yumurta', ids: ['kahvalti', 'yumurta'], img: 'kahvalti-iki-kisilik' },
+  { name: 'Tost ve atıştırmalık', ids: ['tost', 'atistirmalik', 'ozel'], img: 'flamingo-tost' },
+  { name: 'Burger, köfte, wrap', ids: ['burger'], img: 'citir-tavuk-burger' },
+  { name: 'Makarna, kase, salata', ids: ['makarna', 'kase', 'salata'], img: 'fettucini' },
+  { name: 'Tatlılar', ids: ['tatli'], img: 'frambuazli-cheesecake' },
+  { name: 'Kahve ve çay', ids: ['cay', 'sicak-kahve', 'alkollu-kahve', 'soguk-kahve'], img: 'kahve' },
+  { name: 'Serinletici ve soğuk', ids: ['serinletici', 'soguk-icecek'], img: 'serinletici' },
+  { name: 'Bira, şarap, rakı', ids: ['bira', 'alkol', 'raki', 'sarap'], img: 'sarap-peynir' },
+  { name: 'Kokteyl ve shot', ids: ['kokteyl', 'shot'], img: 'flamingo-moonlight' },
+];
+const rows = await Promise.all(
+  day.map(async (d, i) => {
+    const count = menu.filter((s) => d.ids.includes(s.id)).reduce((n, s) => n + s.items.length, 0);
+    const preview = await getImage({ src: photo(d.img), width: 480, format: 'webp' });
+    return { ...d, href: `/menu/#${d.ids[0]}`, count, preview: preview.src, tint: `${Math.round((i / (day.length - 1)) * 100)}%` };
+  }),
+);
+---
+<Base current="home">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <h1 id="hero-title" class="display">
+      <span class="hero__word" data-split="chars" data-intro>Flamingo</span>
+      <span class="hero__sub" data-reveal="fade" data-intro data-delay="0.35">Cafe &amp; Bistro, Çalış Sahili</span>
+    </h1>
+    <div class="hero__stage" aria-hidden="true">
+      <span class="mark mark--pink hero__bird" data-bird></span>
+    </div>
+    <div class="hero__body">
+      <div class="hero__facts" data-reveal="up" data-intro data-delay="0.5">
+        <p>Fethiye’de denizin kıyısında, sabah kahvesinden gece yarısı kokteyline kadar.</p>
+        <span aria-hidden="true"></span>
+        <p class="hero__hours">{site.hours.text}</p>
+        <div class="hero__cta">
+          <a class="btn btn--solid" href="/menu/">Menüyü aç <span class="arrow" aria-hidden="true">↓</span></a>
+          <a class="btn" href={`tel:${site.tel}`}>Ara: {site.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap" aria-hidden="true">
+    <div class="hero__water"></div>
+    <div class="hero__reflect-wrap">
+      <div class="hero__reflect" data-reflect><span class="mark mark--pink"></span></div>
+    </div>
+  </div>
+
+  <section class="statement wrap" aria-labelledby="st-title">
+    <div class="grid">
+      <h2 id="st-title" class="statement__big display" data-split="lines">Flamingolar pembe doğmaz. Rengini <em>yediklerinden</em> alır.</h2>
+      <div class="statement__text" data-reveal="up">
+        <p>Çalış’ta kumun bittiği yerdeyiz. Sabah gelip kahvaltı eden öğleden sonra bir tost söyler, akşamüstü kahvesini içer, güneş denize inerken kokteylini alır.</p>
+        <p>Bu sayfa da aşağı indikçe renk alıyor. Kahvaltıdan başlayıp kokteyle varınca neden pembe olduğumuzu anlayacaksınız.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="specials wrap" aria-labelledby="sp-title">
+    <div class="grid">
+      <h2 id="sp-title" class="specials__head display" data-split="lines">Adını bizden alan tabaklar</h2>
+      <p class="specials__lede muted" data-reveal="fade">Menüde adı Flamingo olan tabaklar. İlk kez geliyorsanız buradan başlayın.</p>
+      <a class="dish w1" href="/menu/#ozel" data-reveal="clip">
+        <figure>
+          <div class="dish__frame"><Image src={photo('flamingo-combo')} alt="Ahşap tahtada patates kızartması, çıtır tavuk, kroket, sosis ve sigara böreği" widths={[480, 800, 1000]} sizes="(max-width: 767px) 92vw, 56vw" /></div>
+          <figcaption><span class="dish__name">Flamingo combo tabağı</span><span class="dish__desc">Patates kızartması, sosis, sigara böreği, Flamingo çıtır tavuk ve kroket. Masaya ortaya söylenir.</span></figcaption>
+        </figure>
+      </a>
+      <a class="dish w2" href="/menu/#kokteyl" data-reveal="clip">
+        <figure>
+          <div class="dish__frame"><Image src={photo('flamingo-moonlight')} alt="Ahşap masada portakal dilimli mavi Flamingo Moonlight kokteyli" widths={[320, 480]} sizes="(max-width: 767px) 75vw, 30vw" /></div>
+          <figcaption><span class="dish__name">Flamingo Moonlight</span><span class="dish__desc">Rom, Cardinal kavun likörü ve Blue Curaçao. Adı flamingo, rengi deniz mavisi.</span></figcaption>
+        </figure>
+      </a>
+      <a class="dish w3" href="/menu/#tost" data-reveal="clip">
+        <figure>
+          <div class="dish__frame"><Image src={photo('flamingo-tost')} alt="Kumsalda ahşap tahtada Flamingo tost, patates ve domates" widths={[320, 480]} sizes="(max-width: 767px) 80vw, 32vw" /></div>
+          <figcaption><span class="dish__name">Flamingo tost</span><span class="dish__desc">Özel sos, kaşar, sucuk, cheddar, domates ve turşu.</span></figcaption>
+        </figure>
+      </a>
+      <a class="dish w4" href="/menu/#burger" data-reveal="clip">
+        <figure>
+          <div class="dish__frame"><Image src={photo('chili-burger')} alt="Üzerinde pembe flamingo kürdanıyla Flamingo chilli burger ve patates" widths={[320, 480]} sizes="(max-width: 767px) 75vw, 40vw" /></div>
+          <figcaption><span class="dish__name">Flamingo chilli burger</span><span class="dish__desc">Acılı burger, yanında patates. Kürdandaki kuşu biz koyduk.</span></figcaption>
+        </figure>
+      </a>
+    </div>
+  </section>
+
+  <section class="day wrap" aria-labelledby="day-title">
+    <div class="day__head">
+      <h2 id="day-title" class="day__title display" data-split="lines">Menü, sabahtan geceye</h2>
+      <p class="muted">Kahvaltı gün boyu var. Sıra, günün sırası.</p>
+    </div>
+    <ul class="day__list" data-index>
+      {rows.map((r) => (
+        <li>
+          <a class="row" href={r.href} data-preview={r.preview} style={`--tint:${r.tint}`}>
+            <span class="row__dot" aria-hidden="true"></span>
+            <span class="row__name"><span class="dip"><span>{r.name}</span><span aria-hidden="true">{r.name}</span></span></span>
+            <span class="row__meta">{r.count} çeşit</span>
+            <img class="row__thumb" src={r.preview} alt="" width="72" height="72" loading="lazy" decoding="async" />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="preview" aria-hidden="true"><img alt="" width="480" height="600" /></div>
+  </section>
+
+  <section id="bizi-bul" class="visit wrap" aria-labelledby="visit-title">
+    <div class="grid">
+      <h2 id="visit-title" class="visit__title display" data-split="lines">Çalış Sahili, deniz tarafı</h2>
+      <dl class="visit__list" data-reveal="up">
+        <div><dt>Adres</dt><dd>{site.address.line}</dd></div>
+        <div><dt>Saatler</dt><dd>Haftanın yedi günü, 10:00’dan gece yarısına</dd></div>
+        <div><dt>Telefon</dt><dd><a class="link" href={`tel:${site.tel}`}>{site.phone}</a></dd></div>
+        <div><dt>Instagram</dt><dd><a class="link" href={site.instagram.href} rel="noopener">{site.instagram.handle}</a></dd></div>
+        <div><dt>Rezervasyon</dt><dd>{site.reservation.text}</dd></div>
+      </dl>
+      <div class="visit__cta">
+        <a class="btn btn--solid" href={site.map} rel="noopener">Haritada aç</a>
+        <a class="btn" href={`tel:${site.tel}`}>Hemen ara</a>
+      </div>
+    </div>
+  </section>
+</Base>

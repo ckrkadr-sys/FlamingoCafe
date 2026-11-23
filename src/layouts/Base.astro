@@ -1,0 +1,113 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../data/site';
+import '../styles/tokens.css';
+import '../styles/engine.css';
+import '../styles/site.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'home' | 'menu';
+  glow?: number; // pin the page's color (404 stays hungry at 0)
+}
+const { title, description = site.description, current, glow } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Çalış Sahili, Fethiye`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: site.name,
+  url: site.url,
+  telephone: site.tel,
+  image: ogImage,
+  servesCuisine: ['Kahvaltı', 'Burger', 'Makarna', 'Kahve', 'Kokteyl'],
+  openingHours: site.hours.schema,
+  hasMenu: new URL('/menu/', Astro.site ?? site.url).href,
+  sameAs: [site.instagram.href],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.line,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    addressCountry: site.address.country,
+  },
+};
+---
+<!doctype html>
+<html lang="tr" transition:animate="none" data-glow={glow} data-page={current}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f7f1e8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <link rel="preload" href="/fonts/display-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/text-300_700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+    </script>
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">İçeriğe geç</a>
+    <div id="curtain" transition:persist="curtain" aria-hidden="true">
+      <div class="curtain__panel"><span class="mark curtain__bird"></span></div>
+    </div>
+    <header class="hdr">
+      <a class="brand" href="/">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="brand__name">Flamingo<small>Cafe &amp; Bistro</small><span class="sr-only">, ana sayfa</span></span>
+      </a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="/menu/" aria-current={current === 'menu' ? 'page' : undefined}><span class="dip"><span>Menü</span><span aria-hidden="true">Menü</span></span></a>
+        <a class="nav__hide" href="/#bizi-bul"><span class="dip"><span>Bizi bul</span><span aria-hidden="true">Bizi bul</span></span></a>
+        <a class="nav__tel" href={`tel:${site.tel}`}><span class="dip"><span>Ara</span><span aria-hidden="true">Ara</span></span><span class="sr-only">: {site.phone}</span></a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="foot wrap">
+      <div class="grid">
+        <p class="foot__big display">Gece yarısına kadar buradayız.</p>
+        <div class="foot__links">
+          <a class="btn" href={`tel:${site.tel}`}>{site.phone}</a>
+          <a class="btn" href={site.instagram.href} rel="noopener">Instagram</a>
+          <a class="btn" href="/menu/">Menü</a>
+        </div>
+        <div class="foot__small">
+          <span>© {new Date().getFullYear()} {site.name} · {site.address.line}</span>
+          <span>Fiyatları masada sorabilirsiniz. Fotoğraflar Flamingo menüsünden.</span>
+        </div>
+      </div>
+      <span class="mark mark--pink foot__bird" aria-hidden="true"></span>
+    </footer>
+    <script>
+      import { start } from '../engine/astro';
+      import { setupMotion } from '../motion/setup';
+      start(setupMotion);
+    </script>
+  </body>
+</html>

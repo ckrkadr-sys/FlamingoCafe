@@ -1,0 +1,70 @@
+/* Flamingo tokens. Colors come from the logo: charcoal disc, flamingo pink, the sand of Çalış. */
+@font-face {
+  font-family: 'Display';
+  src: url('/fonts/display-400-normal.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Display';
+  src: url('/fonts/display-400-normal-ext.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Text';
+  src: url('/fonts/text-300_700-normal.woff2') format('woff2');
+  font-weight: 300 700; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Text';
+  src: url('/fonts/text-300_700-normal-ext.woff2') format('woff2');
+  font-weight: 300 700; font-style: normal; font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* Palette */
+  --sand: #f7f1e8;      /* morning: the beach before the umbrellas open */
+  --sunset: #f6b3cd;    /* evening: Çalış at sunset */
+  --pink: #ee3f93;      /* the flamingo (shapes and large type only: 3.2:1 on sand) */
+  --ink: #232122;       /* the logo's charcoal disc */
+  --night: #232122;
+  --muted: #574d51;     /* AA on sand (7:1) and on sunset (4.6:1) */
+
+  /* --glow (0..1) is written by the driver from scroll progress: the page eats its way to pink. */
+  --glow: 0;
+  --c-bg: color-mix(in oklab, var(--sand), var(--sunset) calc(var(--glow) * 100%));
+  --c-fg: var(--ink);
+  --c-muted: var(--muted);
+  --c-line: rgb(35 33 34 / 0.16);
+  --c-accent: var(--ink);
+  --c-curtain: var(--pink);
+
+  --f-display: 'Display', 'Rockwell', Georgia, serif;
+  --f-body: 'Text', system-ui, sans-serif;
+
+  --t-mega: clamp(4.4rem, 0.6rem + 19.6vw, 21rem);
+  --t-xl: clamp(2.6rem, 1.4rem + 5vw, 6.25rem);
+  --t-l: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
+  --t-m: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
+  --t-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --t-s: 0.875rem;
+  --t-xs: 0.8125rem;
+
+  --u: clamp(0.5rem, 0.35rem + 0.6vw, 1rem);
+  --gutter: clamp(1rem, 0.6rem + 1.6vw, 2.5rem);
+  --hdr: 4rem;
+
+  /* Shape: round like the logo badge, or not at all. Photos and panels are square; buttons and chips are pills. */
+  --pill: 999px;
+
+  --e-dip: cubic-bezier(0.65, 0, 0.35, 1); /* dip and rise */
+  --e-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --z-content: 1;
+  --z-header: 50;
+  --z-curtain: 90;
+  --z-loader: 100;
+}

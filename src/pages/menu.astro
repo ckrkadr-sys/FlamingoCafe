@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { menu, chip } from '../data/menu';
+import { photo } from '../data/photos';
+
+const altFor = (name: string, fallback: string) => {
+  for (const s of menu) for (const i of s.items) if (i.photo === name) return i.desc ? `${i.tr}: ${i.desc.toLowerCase()}` : i.tr;
+  return fallback;
+};
+const total = menu.reduce((n, s) => n + s.items.length, 0);
+---
+<Base
+  title="Menü"
+  current="menu"
+  description="Flamingo Cafe & Bistro menüsü: gün boyu kahvaltı, tost, burger, makarna, kase, tatlı, kahve, bira, şarap ve kokteyller. Türkçe ve İngilizce."
+>
+  <section class="mhero wrap" aria-labelledby="menu-title">
+    <div class="grid">
+      <h1 id="menu-title" class="mhero__title display" data-split="chars" data-intro>Menü</h1>
+      <div class="mhero__text" data-reveal="up" data-intro data-delay="0.3">
+        <p><strong>{menu.length} bölüm, {total} çeşit.</strong> Kahvaltı gün boyu servis edilir. Fiyatları ekibimize sorabilirsiniz.</p>
+        <p class="muted">Sayfa, sabah kahvaltısından gece kokteyline doğru ilerliyor ve indikçe pembeleşiyor. Flamingo gibi: ne kadar yerseniz o kadar.</p>
+      </div>
+    </div>
+  </section>
+
+  <nav class="chips" aria-label="Menü bölümleri" data-chips>
+    <ul>
+      {menu.map((s) => <li><a href={`#${s.id}`} data-chip={s.id}><span class="dip"><span>{chip[s.id]}</span><span aria-hidden="true">{chip[s.id]}</span></span></a></li>)}
+    </ul>
+  </nav>
+
+  {menu.map((s) => (
+    <section id={s.id} class:list={['msec wrap', { 'msec--plain': !s.photo }]} aria-labelledby={`${s.id}-t`} data-section>
+      <div class="grid">
+        <div class="msec__head">
+          <h2 id={`${s.id}-t`} class="msec__title display">{s.tr}</h2>
+          {s.en !== s.tr && <span class="msec__en" lang="en">{s.en}</span>}
+        </div>
+        {s.note && <p class="msec__note">{s.note}</p>}
+        {s.photo && (
+          <figure class="msec__photo">
+            <Image src={photo(s.photo)} alt={altFor(s.photo, s.tr)} widths={[400, 640, 800]} sizes="(max-width: 767px) 92vw, 38vw" loading="lazy" />
+          </figure>
+        )}
+        <ul class="items">
+          {s.items.map((i) => (
+            <li class="item">
+              <h3>{i.tr}{i.en && <span class="en" lang="en"> / {i.en}</span>}</h3>
+              {i.desc && <p>{i.desc}</p>}
+              {i.photo && i.photo !== s.photo && (
+                <Image src={photo(i.photo)} alt={i.tr} width={144} height={144} loading="lazy" />
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="mend wrap" aria-labelledby="end-title">
+    <h2 id="end-title" class="mend__big display">Gün battı, sıra sizde.</h2>
+    <p>Masanızı ayırtmak ya da bir şey sormak için arayın. Instagram’dan da yazabilirsiniz: <a class="link" href={site.instagram.href} rel="noopener">{site.instagram.handle}</a></p>
+    <a class="btn btn--solid" href={`tel:${site.tel}`}>Ara: {site.phone}</a>
+  </section>
+</Base>

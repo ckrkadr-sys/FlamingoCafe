@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Sayfa bulunamadı" description="Aradığınız sayfa burada yok. Flamingo Cafe & Bistro menüsüne ya da ana sayfaya dönebilirsiniz." glow={0}>
+  <section class="lost wrap" aria-labelledby="lost-title">
+    <div class="lost__bird" aria-hidden="true"><span class="mark"></span></div>
+    <div class="lost__text">
+      <p class="lost__code display" aria-hidden="true">404</p>
+      <h1 id="lost-title" class="lost__title" data-split="lines" data-intro>Bu flamingo henüz bir şey yemedi, o yüzden hâlâ gri.</h1>
+      <p class="muted">Aradığınız sayfa yok. Menüye uğrarsa rengi geri gelir.</p>
+      <div><a class="btn btn--solid" href="/menu/">Menüyü aç</a></div>
+    </div>
+  </section>
+</Base>

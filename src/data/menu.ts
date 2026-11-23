@@ -1,0 +1,275 @@
+// The printed menu (menu/1-6), transcribed in its own order: the day runs from breakfast to shots.
+// No prices: the printed menu has none. `photo` names a file in src/assets/food (cut from the scans).
+
+export type Item = { tr: string; en?: string; desc?: string; photo?: string };
+export type Section = { id: string; tr: string; en: string; note?: string; photo?: string; items: Item[] };
+
+export const menu: Section[] = [
+  {
+    id: 'kahvalti', tr: 'Gün boyu kahvaltı', en: 'All-day breakfasts', photo: 'kahvalti-iki-kisilik',
+    items: [
+      { tr: 'İki kişilik kahvaltı', en: 'For 2 people', photo: 'kahvalti-iki-kisilik',
+        desc: 'Beyaz peynir, çeçil peyniri, top peynir, siyah zeytin, yeşil zeytin, ızgara zeytin, acuka, sahanda yumurta, söğüş tabağı, reçel, bal, çikolata, simit, patates kızartması, pişi, sosis, sigara böreği ve sınırsız çay' },
+      { tr: 'Mini kahvaltı', en: 'For 1 person', photo: 'mini-kahvalti',
+        desc: 'Beyaz peynir, siyah zeytin, yeşil zeytin, haşlanmış yumurta, domates, salatalık, reçel, bal, tereyağı, sınırsız çay' },
+      { tr: 'Kahvaltı sepeti', en: 'Breakfast basket', photo: 'kahvalti-sepeti', desc: 'Patates kızartması, simit, sosis, sigara böreği, pişi' },
+      { tr: 'Simit tabağı', en: 'Bagel plate', photo: 'simit-tabagi', desc: 'Beyaz peynir, labne, domates, salatalık, siyah zeytin, yeşil zeytin' },
+      { tr: 'Pişi tabağı', en: 'Fried dough plate', photo: 'pisi-tabagi', desc: 'Beyaz peynir, domates, salatalık, siyah zeytin, yeşil zeytin' },
+      { tr: 'Sosis tabağı', en: 'Sausage plate' },
+      { tr: 'Sigara böreği', en: 'Spring rolls' },
+      { tr: 'Sahanda ızgara sucuk', en: 'Fried sausage' },
+      { tr: 'Pankek', en: 'Pancake', photo: 'pankek-tabak' },
+      { tr: 'Smoothie bowl', desc: 'Mevsim meyveleri, yulaf, yoğurt veya süt, bal, fıstık ezmesi, ceviz' },
+    ],
+  },
+  {
+    id: 'yumurta', tr: 'Yumurtalı lezzetler', en: 'Egg-based delicacies', photo: 'omlet-avokado',
+    items: [
+      { tr: 'Sahanda yumurta', en: 'Fried eggs' },
+      { tr: 'Sahanda sucuklu yumurta', en: 'Fried eggs with sausage', photo: 'sahanda-sucuklu' },
+      { tr: 'Menemen', desc: 'Domates ve yeşil biberle pişen yumurta', photo: 'menemen' },
+      { tr: 'Peynirli omlet', en: 'Omelette with cheese' },
+      { tr: 'Mantarlı omlet', en: 'Omelette with mushrooms' },
+      { tr: 'Mantarlı kaşarlı omlet', en: 'Omelette with mushroom and kaşar cheese' },
+      { tr: 'Avokadolu omlet', en: 'Omelette with avocado', photo: 'omlet-avokado' },
+      { tr: 'Sebzeli omlet', en: 'Omelette with vegetables' },
+    ],
+  },
+  {
+    id: 'tost', tr: 'Tost ve sandviç', en: 'Toast and sandwich', photo: 'flamingo-tost',
+    items: [
+      { tr: 'Kaşarlı tost', en: 'Kaşar cheese toast' },
+      { tr: 'Peynirli tost', en: 'White cheese toast', desc: 'Domates ve kekikli' },
+      { tr: 'Karışık tost', en: 'Mixed toast' },
+      { tr: 'Glutensiz tost', en: 'Gluten-free toast' },
+      { tr: 'Flamingo tost', en: 'Flamingo toast', photo: 'flamingo-tost', desc: 'Özel sos, kaşar, sucuk, cheddar peyniri, domates, turşu' },
+      { tr: 'Soğuk sandviç', en: 'Cold sandwich', photo: 'soguk-sandvic', desc: 'Labne, zeytin ezmesi, yeşillik, hindi füme, kaşar, domates, salatalık ve cips' },
+    ],
+  },
+  {
+    id: 'atistirmalik', tr: 'Atıştırmalıklar', en: 'Snacks', photo: 'peynir-tabagi',
+    items: [
+      { tr: 'Patates kızartması', en: 'French fries' },
+      { tr: 'Sigara böreği', en: 'Spring rolls', photo: 'sigara-boregi' },
+      { tr: 'Sosis tabağı', en: 'Sausage plate', photo: 'sosis-tabagi' },
+      { tr: 'Peynir tabağı', en: 'Cheese plate', photo: 'peynir-tabagi', desc: 'Beyaz peynir, kaşar peyniri, çeçil peyniri, top peynir, hindi füme, ızgara zeytin, ceviz, kuru üzüm ve galeta' },
+      { tr: 'Tuzlu fıstık', en: 'Peanuts' },
+    ],
+  },
+  {
+    id: 'ozel', tr: 'Flamingo özel lezzetler', en: 'Flamingo’s specials', photo: 'flamingo-combo',
+    items: [
+      { tr: 'Flamingo combo tabağı', en: 'Flamingo combo plate', photo: 'flamingo-combo', desc: 'Patates kızartması, sosis, sigara böreği, Flamingo çıtır tavuk, kroket' },
+      { tr: 'Flamingo çıtır tavuk parçaları', en: 'Flamingo crispy chicken pieces', photo: 'citir-tavuk', desc: 'Patates kızartması, Flamingo çıtır tavuk' },
+    ],
+  },
+  {
+    id: 'burger', tr: 'Burger, köfte ve wrap', en: 'Burgers, meatballs and wraps', photo: 'citir-tavuk-burger',
+    items: [
+      { tr: 'Flamingo chilli burger', photo: 'chili-burger' },
+      { tr: 'Hamburger' },
+      { tr: 'Cheeseburger' },
+      { tr: 'Çıtır tavuk burger', en: 'Crispy chicken burger', photo: 'citir-tavuk-burger' },
+      { tr: 'İnegöl köfte', en: 'İnegöl-style meatballs', photo: 'inegol-kofte', desc: 'Patates kızartması, közlenmiş biber, domates, köfte sosu ve biber turşusu ile' },
+      { tr: 'Köfte topları', en: 'Meatballs', photo: 'kofte-toplari', desc: 'Patates kızartması ile' },
+      { tr: 'Şinitzel', en: 'Schnitzel', photo: 'sinitzel', desc: 'Patates kızartması, Meksika fasulyesi, taze yeşillik, domates, salatalık ile' },
+      { tr: 'Fish & chips', photo: 'fish-chips', desc: 'Panelenmiş çıtır balık, patates kızartması, özel soslar ile' },
+      { tr: 'Köfte wrap', en: 'Meatball wrap', desc: 'Köfte, karamelize soğan, sotelenmiş biber, kaşar peyniri, kekik, taze yeşillik ve domates ile' },
+      { tr: 'Tavuk wrap', en: 'Chicken wrap', photo: 'tavuk-wrap', desc: 'Tavuk fileto, karamelize soğan, sotelenmiş biber, kaşar peyniri, krema, köri, kekik, taze yeşillik ve domates ile' },
+    ],
+  },
+  {
+    id: 'makarna', tr: 'Makarnalar', en: 'Pastas', photo: 'fettucini',
+    items: [
+      { tr: 'Fettucini Alfredo', photo: 'fettucini', desc: 'Krema, kaşar, mantar, tavuk, fesleğen' },
+      { tr: 'Penne Arrabiata', desc: 'Acılı domates sos, parmesan, fesleğen' },
+      { tr: 'Napoliten', desc: 'Domates sos, parmesan, fesleğen' },
+      { tr: 'Ev yapımı mantı', en: 'Homemade Turkish ravioli', photo: 'manti' },
+    ],
+  },
+  {
+    id: 'kase', tr: 'Bol bol kase', en: 'Bowls', photo: 'kofte-bowl',
+    items: [
+      { tr: 'Köfte bowl', en: 'Meatball bowl', photo: 'kofte-bowl', desc: 'Köfte topları, taze yeşillik, domates, salatalık, Meksika fasulyesi, haşlanmış pirinç, kuru domates, mısır' },
+      { tr: 'Tavuk bowl', en: 'Chicken bowl', desc: 'Tavuk fileto, taze yeşillik, domates, salatalık, Meksika fasulyesi, haşlanmış pirinç, kuru domates, mısır' },
+      { tr: 'Falafel bowl', desc: 'Falafel, taze yeşillik, domates, salatalık, Meksika fasulyesi, haşlanmış pirinç, kuru domates, mısır' },
+      { tr: 'Avokado bowl', en: 'Avocado bowl', desc: 'Avokado, taze yeşillik, domates, salatalık, Meksika fasulyesi, haşlanmış pirinç, kuru domates, mısır' },
+      { tr: 'Sade bowl', en: 'Plain bowl', desc: 'Taze yeşillik, domates, salatalık, Meksika fasulyesi, haşlanmış pirinç, kuru domates, mısır' },
+      { tr: 'Smoothie bowl', photo: 'smoothie-bowl', desc: 'Mevsim meyveleri, yulaf, yoğurt veya süt, bal, fıstık ezmesi, ceviz' },
+    ],
+  },
+  {
+    id: 'salata', tr: 'Salatalar', en: 'Salads',
+    items: [
+      { tr: 'Tavuklu salata', en: 'Chicken salad' },
+      { tr: 'Ton balıklı salata', en: 'Tuna salad' },
+      { tr: 'Peynirli salata', en: 'Cheese salad' },
+      { tr: 'Yeşil salata', en: 'Greens salad' },
+      { tr: 'Avokadolu salata', en: 'Avocado salad' },
+    ],
+  },
+  {
+    id: 'tatli', tr: 'Tatlılar', en: 'Desserts', photo: 'pankek',
+    items: [
+      { tr: 'Frambuazlı cheesecake', en: 'Raspberry cheesecake', photo: 'frambuazli-cheesecake' },
+      { tr: 'San Sebastian cheesecake', photo: 'san-sebastian' },
+      { tr: 'Ev yapımı mozaik pasta', en: 'Homemade mosaic cake', photo: 'mozaik-pasta', desc: 'Bir top dondurma ile servis edilir' },
+      { tr: 'Pankek', en: 'Pancake', photo: 'pankek' },
+      { tr: 'Dondurma', en: 'Ice cream', desc: 'Bir top' },
+    ],
+  },
+  {
+    id: 'cay', tr: 'Çaylar', en: 'Tea',
+    items: [
+      { tr: 'Demleme çay', en: 'Brewed tea' },
+      { tr: 'İngiliz çayı', en: 'English tea' },
+      { tr: 'Hibiskus çayı', en: 'Hibiscus tea' },
+      { tr: 'Ihlamur', en: 'Linden tea' },
+      { tr: 'Yeşil çay', en: 'Green tea' },
+      { tr: 'Adaçayı', en: 'Sage tea' },
+      { tr: 'Kış çayı', en: 'Winter tea' },
+    ],
+  },
+  {
+    id: 'sicak-kahve', tr: 'Sıcak kahveler', en: 'Hot coffees', photo: 'kahve',
+    items: [
+      { tr: 'Türk kahvesi', en: 'Turkish coffee' },
+      { tr: 'Filtre kahve', en: 'Filter coffee' },
+      { tr: 'Flat white' },
+      { tr: 'Espresso' },
+      { tr: 'Americano' },
+      { tr: 'Cappuccino' },
+      { tr: 'Caffè latte' },
+      { tr: 'Caramel latte' },
+      { tr: 'Chocolate mocha latte' },
+      { tr: 'White chocolate mocha latte' },
+      { tr: 'Fıstıklı latte', en: 'Pistachio latte', desc: 'Fıstık kreması ve süt ile' },
+      { tr: 'Fındıklı latte', en: 'Hazelnut latte', desc: 'Fındık kreması ve süt ile' },
+      { tr: 'Chai tea latte' },
+      { tr: 'Sıcak çikolata', en: 'Hot chocolate' },
+      { tr: 'Salep' },
+    ],
+  },
+  {
+    id: 'alkollu-kahve', tr: 'Alkollü kahveler', en: 'Alcoholic coffees',
+    items: [{ tr: 'Coffee Baileys' }, { tr: 'Irish coffee' }],
+  },
+  {
+    id: 'soguk-kahve', tr: 'Soğuk kahveler', en: 'Iced coffee',
+    items: [
+      { tr: 'Iced chocolate mocha' },
+      { tr: 'Iced white chocolate mocha' },
+      { tr: 'Iced latte' },
+      { tr: 'Iced caramel latte' },
+      { tr: 'Iced americano' },
+      { tr: 'Dondurmalı frappe', en: 'Frappe with ice cream' },
+      { tr: 'Fıstıklı latte', en: 'Pistachio latte', desc: 'Fıstık kreması ve süt ile' },
+      { tr: 'Fındıklı latte', en: 'Hazelnut latte', desc: 'Fındık kreması ve süt ile' },
+    ],
+  },
+  {
+    id: 'serinletici', tr: 'Serinleticiler', en: 'Refreshing drinks', photo: 'serinletici',
+    items: [
+      { tr: 'Virgin mojito', desc: 'Sprite, taze nane, lime' },
+      { tr: 'Cool lime' },
+      { tr: 'Cool berry' },
+      { tr: 'Ev yapımı limonata', en: 'Homemade lemonade' },
+    ],
+  },
+  {
+    id: 'soguk-icecek', tr: 'Soğuk içecekler', en: 'Soft drinks',
+    items: [
+      { tr: 'Cola' }, { tr: 'Cola zero' }, { tr: 'Fanta' }, { tr: 'Sprite' }, { tr: 'Ice tea' },
+      { tr: 'Vişne suyu', en: 'Cherry juice' },
+      { tr: 'Şeftali suyu', en: 'Peach juice' },
+      { tr: 'Soda' },
+      { tr: 'Meyveli soda', en: 'Fruit soda' },
+      { tr: 'Churchill' },
+      { tr: 'Su, 50 cl', en: 'Water' },
+      { tr: 'Tonik', en: 'Tonic' },
+      { tr: 'Red Bull' },
+      { tr: 'Ayran', en: 'Buttermilk' },
+    ],
+  },
+  {
+    id: 'bira', tr: 'Biralar', en: 'Beers',
+    items: [
+      { tr: 'Efes fıçı, 50 cl', en: 'Draft' },
+      { tr: 'Efes fıçı, 33 cl', en: 'Draft' },
+      { tr: 'Mexican fıçı, 50 cl', en: 'Draft' },
+      { tr: 'Mexican fıçı, 33 cl', en: 'Draft' },
+      { tr: 'Efes, 50 cl' },
+      { tr: 'Efes Malt, 50 cl' },
+      { tr: 'Efes Green, 50 cl' },
+      { tr: 'Efes Gluten Free, 50 cl' },
+      { tr: 'Bomonti Unfiltered, 50 cl' },
+      { tr: 'Tuborg, 50 cl' },
+      { tr: 'Carlsberg, 50 cl' },
+      { tr: 'Miller, 33 cl' },
+      { tr: 'Beck’s, 50 cl' },
+      { tr: 'Corona, 33 cl' },
+      { tr: 'Bud, 50 cl' },
+      { tr: 'Belfast, 50 cl' },
+      { tr: 'Stella Artois, 44 cl' },
+      { tr: 'Guinness, 50 cl' },
+      { tr: 'Shandy', desc: 'Bira ve Sprite' },
+    ],
+  },
+  {
+    id: 'alkol', tr: 'Alkollü içecekler', en: 'Alcohol drinks',
+    items: [
+      { tr: 'Chivas Regal' }, { tr: 'Jack Daniel’s' }, { tr: 'Smirnoff Red' }, { tr: 'Gordon’s Gin' },
+      { tr: 'Captain Morgan' }, { tr: 'Baileys' }, { tr: 'Cardinal Melon' },
+    ],
+  },
+  {
+    id: 'raki', tr: 'Rakı', en: 'Rakı', note: 'Tek, duble ya da 70 cl şişe.',
+    items: [{ tr: 'Beylerbeyi Göbek' }, { tr: 'Beylerbeyi Terra Gold' }, { tr: 'Yeni Rakı' }],
+  },
+  {
+    id: 'sarap', tr: 'Şaraplar', en: 'Wines', photo: 'sarap-peynir',
+    note: 'Kadeh ya da şişe. Şaraplarımız mini şarap tabağı ile servis edilir.',
+    items: [
+      { tr: 'Kırmızı', en: 'Red' },
+      { tr: 'Beyaz', en: 'White' },
+      { tr: 'Rose' },
+      { tr: 'Sıcak şarap', en: 'Hot wine' },
+      { tr: 'Spritzer', desc: 'Beyaz şarap ve soda' },
+    ],
+  },
+  {
+    id: 'kokteyl', tr: 'Kokteyller', en: 'Cocktails', photo: 'flamingo-moonlight',
+    items: [
+      { tr: 'Flamingo Moonlight', photo: 'flamingo-moonlight', desc: 'Rom, Cardinal kavun likörü, sweet & sour, Blue Curaçao' },
+      { tr: 'Mojito', photo: 'mojito', desc: 'Rom, taze nane, lime, soda, esmer şeker' },
+      { tr: 'Margarita', photo: 'margarita', desc: 'Tekila, Cointreau, lime' },
+      { tr: 'Long Island ice tea', desc: 'Votka, cin, Cointreau, rom, tekila, kola, lime' },
+      { tr: 'Lynchburg lemonade', desc: 'Bourbon viski, Cointreau, Sprite, sweet & sour' },
+      { tr: 'Negroni', desc: 'Campari, kırmızı vermut, cin' },
+      { tr: 'Aperol spritz', desc: 'Beyaz şarap, Aperol, soda' },
+      { tr: 'Frozen strawberry daiquiri', desc: 'Rom, lime suyu, çilek' },
+      { tr: 'Apple martini', photo: 'apple-martini', desc: 'Votka, elma suyu, sweet & sour' },
+      { tr: 'Espresso martini', desc: 'Votka, kahve likörü, espresso' },
+      { tr: 'Cin tonik', en: 'Gin tonic' },
+    ],
+  },
+  {
+    id: 'shot', tr: 'Shotlar', en: 'Shots',
+    items: [
+      { tr: 'Tequila shot' },
+      { tr: 'Jägermeister shot' },
+      { tr: 'Long Island ice tea shot, 6’lı' },
+      { tr: 'Margarita shot, 6’lı' },
+      { tr: 'Tequila shot, 6’lı' },
+    ],
+  },
+];
+
+// Chip labels for the sticky bar (short).
+export const chip: Record<string, string> = {
+  kahvalti: 'Kahvaltı', yumurta: 'Yumurta', tost: 'Tost', atistirmalik: 'Atıştırmalık', ozel: 'Flamingo özel',
+  burger: 'Burger', makarna: 'Makarna', kase: 'Kase', salata: 'Salata', tatli: 'Tatlı', cay: 'Çay',
+  'sicak-kahve': 'Sıcak kahve', 'alkollu-kahve': 'Alkollü kahve', 'soguk-kahve': 'Soğuk kahve',
+  serinletici: 'Serinletici', 'soguk-icecek': 'Soğuk içecek', bira: 'Bira', alkol: 'Alkol', raki: 'Rakı',
+  sarap: 'Şarap', kokteyl: 'Kokteyl', shot: 'Shot',
+};
