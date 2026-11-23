@@ -32,7 +32,7 @@ const total = menu.reduce((n, s) => n + s.items.length, 0);
     </ul>
   </nav>
 
-  {menu.map((s) => (
+  {menu.map((s, n) => (
     <section id={s.id} class:list={['msec wrap', { 'msec--plain': !s.photo }]} aria-labelledby={`${s.id}-t`} data-section>
       <div class="grid">
         <div class="msec__head">
@@ -42,7 +42,7 @@ const total = menu.reduce((n, s) => n + s.items.length, 0);
         {s.note && <p class="msec__note">{s.note}</p>}
         {s.photo && (
           <figure class="msec__photo">
-            <Image src={photo(s.photo)} alt={altFor(s.photo, s.tr)} widths={[400, 640, 800]} sizes="(max-width: 767px) 92vw, 38vw" loading="lazy" />
+            <Image src={photo(s.photo)} alt={altFor(s.photo, s.tr)} widths={[400, 640, 800]} sizes="(max-width: 767px) 92vw, 30vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
           </figure>
         )}
         <ul class="items">

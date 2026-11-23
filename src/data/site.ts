@@ -4,7 +4,7 @@
 //  - address: only "Çalış Sahili, Fethiye" is known; street and number are missing.
 //  - reservation: by phone call or Instagram message (WhatsApp not assumed).
 //  - prices: the printed menu has none, so the site shows none.
-//  - photos: cut from the printed menu scans (low resolution); replace with the originals.
+//  - photos: the café's own set (scripts/photos.mjs); drinks, cocktails, cheesecakes and the combo plate have none yet.
 
 export const site = {
   name: 'Flamingo Cafe & Bistro',

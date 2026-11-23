@@ -144,15 +144,14 @@ a.dish:focus-visible .dish__frame img { scale: 1.06; translate: 0 2%; }
 @media (hover: hover) { a.dish:hover .dish__name { background-size: 100% 3px; } }
 a.dish:focus-visible .dish__name { background-size: 100% 3px; }
 .dish__desc { font-size: var(--t-s); color: var(--c-muted); max-width: 40ch; }
-.w1 { grid-column: 1 / span 6; } .w1 .dish__frame { aspect-ratio: 3 / 2; }
-.w2 { grid-column: 9 / span 3; margin-top: 22%; } .w2 .dish__frame { aspect-ratio: 4 / 5; }
-.w3 { grid-column: 2 / span 3; margin-top: calc(var(--u) * 6); } .w3 .dish__frame { aspect-ratio: 1; }
-.w4 { grid-column: 7 / span 4; margin-top: calc(var(--u) * 12); } .w4 .dish__frame { aspect-ratio: 4 / 3; }
+.w1 { grid-column: 1 / span 5; grid-row: 2 / span 2; } .w1 .dish__frame { aspect-ratio: 4 / 5; }
+.w2 { grid-column: 7 / span 6; grid-row: 2; margin-top: 10%; } .w2 .dish__frame { aspect-ratio: 16 / 9; }
+.w3 { grid-column: 8 / span 4; grid-row: 3; margin-top: calc(var(--u) * 5); } .w3 .dish__frame { aspect-ratio: 4 / 3; }
 @media (max-width: 767px) {
   .specials__head, .specials__lede { grid-column: 1 / -1; }
   .specials__lede { margin-top: calc(var(--u) * -2); }
-  .w1, .w2, .w3, .w4 { grid-column: 1 / -1; margin-top: calc(var(--u) * 4); }
-  .w2, .w4 { grid-column: 3 / -1; }
+  .w1, .w2, .w3 { grid-column: 1 / -1; grid-row: auto; margin-top: calc(var(--u) * 4); }
+  .w2 { grid-column: 3 / -1; }
   .w3 { grid-column: 1 / span 10; }
 }
 

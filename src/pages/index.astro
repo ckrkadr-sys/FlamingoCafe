@@ -9,19 +9,20 @@ import { photo } from '../data/photos';
 const day = [
   { name: 'Kahvaltı ve yumurta', ids: ['kahvalti', 'yumurta'], img: 'kahvalti-iki-kisilik' },
   { name: 'Tost ve atıştırmalık', ids: ['tost', 'atistirmalik', 'ozel'], img: 'flamingo-tost' },
-  { name: 'Burger, köfte, wrap', ids: ['burger'], img: 'citir-tavuk-burger' },
+  { name: 'Burger, köfte, wrap', ids: ['burger'], img: 'tavuk-wrap' },
   { name: 'Makarna, kase, salata', ids: ['makarna', 'kase', 'salata'], img: 'fettucini' },
-  { name: 'Tatlılar', ids: ['tatli'], img: 'frambuazli-cheesecake' },
-  { name: 'Kahve ve çay', ids: ['cay', 'sicak-kahve', 'alkollu-kahve', 'soguk-kahve'], img: 'kahve' },
-  { name: 'Serinletici ve soğuk', ids: ['serinletici', 'soguk-icecek'], img: 'serinletici' },
-  { name: 'Bira, şarap, rakı', ids: ['bira', 'alkol', 'raki', 'sarap'], img: 'sarap-peynir' },
-  { name: 'Kokteyl ve shot', ids: ['kokteyl', 'shot'], img: 'flamingo-moonlight' },
+  { name: 'Tatlılar', ids: ['tatli'], img: 'pankek' },
+  { name: 'Kahve ve çay', ids: ['cay', 'sicak-kahve', 'alkollu-kahve', 'soguk-kahve'] },
+  { name: 'Serinletici ve soğuk', ids: ['serinletici', 'soguk-icecek'] },
+  { name: 'Bira, şarap, rakı', ids: ['bira', 'alkol', 'raki', 'sarap'], img: 'sarap-rose' },
+  { name: 'Kokteyl ve shot', ids: ['kokteyl', 'shot'] },
 ];
 const rows = await Promise.all(
   day.map(async (d, i) => {
     const count = menu.filter((s) => d.ids.includes(s.id)).reduce((n, s) => n + s.items.length, 0);
-    const preview = await getImage({ src: photo(d.img), width: 480, format: 'webp' });
-    return { ...d, href: `/menu/#${d.ids[0]}`, count, preview: preview.src, tint: `${Math.round((i / (day.length - 1)) * 100)}%` };
+    // Drinks have no photos yet: those rows show no preview.
+    const preview = d.img ? (await getImage({ src: photo(d.img), width: 480, format: 'webp' })).src : undefined;
+    return { ...d, href: `/menu/#${d.ids[0]}`, count, preview, tint: `${Math.round((i / (day.length - 1)) * 100)}%` };
   }),
 );
 ---
@@ -69,25 +70,19 @@ const rows = await Promise.all(
       <p class="specials__lede muted" data-reveal="fade">Menüde adı Flamingo olan tabaklar. İlk kez geliyorsanız buradan başlayın.</p>
       <a class="dish w1" href="/menu/#ozel" data-reveal="clip">
         <figure>
-          <div class="dish__frame"><Image src={photo('flamingo-combo')} alt="Ahşap tahtada patates kızartması, çıtır tavuk, kroket, sosis ve sigara böreği" widths={[480, 800, 1000]} sizes="(max-width: 767px) 92vw, 56vw" /></div>
-          <figcaption><span class="dish__name">Flamingo combo tabağı</span><span class="dish__desc">Patates kızartması, sosis, sigara böreği, Flamingo çıtır tavuk ve kroket. Masaya ortaya söylenir.</span></figcaption>
+          <div class="dish__frame"><Image src={photo('citir-tavuk')} alt="Tel sepette Flamingo çıtır tavuk parçaları ve patates kızartması" widths={[480, 720, 960]} sizes="(max-width: 767px) 92vw, 40vw" /></div>
+          <figcaption><span class="dish__name">Flamingo çıtır tavuk parçaları</span><span class="dish__desc">Tel sepette çıtır tavuk ve patates. Masaya ortaya da söylenir.</span></figcaption>
         </figure>
       </a>
-      <a class="dish w2" href="/menu/#kokteyl" data-reveal="clip">
+      <a class="dish w2" href="/menu/#tost" data-reveal="clip">
         <figure>
-          <div class="dish__frame"><Image src={photo('flamingo-moonlight')} alt="Ahşap masada portakal dilimli mavi Flamingo Moonlight kokteyli" widths={[320, 480]} sizes="(max-width: 767px) 75vw, 30vw" /></div>
-          <figcaption><span class="dish__name">Flamingo Moonlight</span><span class="dish__desc">Rom, Cardinal kavun likörü ve Blue Curaçao. Adı flamingo, rengi deniz mavisi.</span></figcaption>
-        </figure>
-      </a>
-      <a class="dish w3" href="/menu/#tost" data-reveal="clip">
-        <figure>
-          <div class="dish__frame"><Image src={photo('flamingo-tost')} alt="Kumsalda ahşap tahtada Flamingo tost, patates ve domates" widths={[320, 480]} sizes="(max-width: 767px) 80vw, 32vw" /></div>
+          <div class="dish__frame"><Image src={photo('flamingo-tost')} alt="Ahşap tahtada pembe flamingo kürdanlı Flamingo tost, patates, domates ve salatalık" widths={[480, 800, 1200]} sizes="(max-width: 767px) 80vw, 48vw" /></div>
           <figcaption><span class="dish__name">Flamingo tost</span><span class="dish__desc">Özel sos, kaşar, sucuk, cheddar, domates ve turşu.</span></figcaption>
         </figure>
       </a>
-      <a class="dish w4" href="/menu/#burger" data-reveal="clip">
+      <a class="dish w3" href="/menu/#burger" data-reveal="clip">
         <figure>
-          <div class="dish__frame"><Image src={photo('chili-burger')} alt="Üzerinde pembe flamingo kürdanıyla Flamingo chilli burger ve patates" widths={[320, 480]} sizes="(max-width: 767px) 75vw, 40vw" /></div>
+          <div class="dish__frame"><Image src={photo('chili-burger')} alt="Üzerinde pembe flamingo kürdanıyla Flamingo chilli burger ve patates" widths={[400, 640, 800]} sizes="(max-width: 767px) 80vw, 32vw" /></div>
           <figcaption><span class="dish__name">Flamingo chilli burger</span><span class="dish__desc">Acılı burger, yanında patates. Kürdandaki kuşu biz koyduk.</span></figcaption>
         </figure>
       </a>
@@ -106,7 +101,7 @@ const rows = await Promise.all(
             <span class="row__dot" aria-hidden="true"></span>
             <span class="row__name"><span class="dip"><span>{r.name}</span><span aria-hidden="true">{r.name}</span></span></span>
             <span class="row__meta">{r.count} çeşit</span>
-            <img class="row__thumb" src={r.preview} alt="" width="72" height="72" loading="lazy" decoding="async" />
+            {r.preview && <img class="row__thumb" src={r.preview} alt="" width="72" height="72" loading="lazy" decoding="async" />}
           </a>
         </li>
       ))}
