@@ -58,9 +58,9 @@ export async function boot(setup?: () => void) {
   intro?.play();
 }
 
-export async function leave() {
+export async function leave({ transition = true } = {}) {
   stopScroll();
-  await playLeave();
+  if (transition) await playLeave();
 }
 
 export function cleanup() {
@@ -71,12 +71,13 @@ export function cleanup() {
   ctx = null;
 }
 
-export async function enter({ transition = true, scrollTop = true } = {}) {
+export async function enter({ transition = true, scrollTop = true, playIntro = true } = {}) {
   if (!booted) return;
   cleanup();
   if (scrollTop) resetScroll();
   initPage();
   if (transition) await playEnter();
   startScroll();
-  intro?.play();
+  if (playIntro) intro?.play();
+  else intro?.progress(1);
 }

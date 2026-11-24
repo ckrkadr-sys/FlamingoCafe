@@ -51,6 +51,7 @@ export function resetScroll() {
   else scrollTo(0, 0);
   state.y = 0;
   state.velocity = 0;
+  state.progress = 0;
 }
 // offset: pixels to stop above the target (a sticky header); immediate: jump without easing.
 export function scrollToTarget(target: string | HTMLElement | number, { offset = 0, immediate = false } = {}) {

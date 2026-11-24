@@ -12,9 +12,9 @@ export const menu: Section[] = [
   {
     id: 'kahvalti', title: { tr: 'Gün boyu kahvaltı', en: 'All-day breakfasts' }, photo: 'kahvalti-iki-kisilik',
     items: [
-      { name: { tr: 'İki kişilik kahvaltı', en: 'For 2 people' }, photo: 'kahvalti-iki-kisilik',
+      { name: { tr: 'İki kişilik kahvaltı', en: 'Breakfast for two' }, photo: 'kahvalti-iki-kisilik',
         desc: { tr: 'Beyaz peynir, çeçil peyniri, top peynir, siyah zeytin, yeşil zeytin, ızgara zeytin, acuka, sahanda yumurta, söğüş tabağı, reçel, bal, çikolata, simit, patates kızartması, pişi, sosis, sigara böreği ve sınırsız çay', en: 'White cheese, çeçil cheese, cheese balls, black olives, green olives, grilled olives, acuka, fried eggs, fresh vegetable plate, jam, honey, chocolate spread, simit, French fries, pişi, sausages, spring rolls and unlimited tea' } },
-      { name: { tr: 'Mini kahvaltı', en: 'For 1 person' },
+      { name: { tr: 'Mini kahvaltı', en: 'Mini breakfast (for one)' },
         desc: { tr: 'Beyaz peynir, siyah zeytin, yeşil zeytin, haşlanmış yumurta, domates, salatalık, reçel, bal, tereyağı, sınırsız çay', en: 'White cheese, black olives, green olives, boiled egg, tomatoes, cucumbers, jam, honey, butter, unlimited tea' } },
       { name: { tr: 'Kahvaltı sepeti', en: 'Breakfast basket' }, photo: 'kahvalti-sepeti',
         desc: { tr: 'Patates kızartması, simit, sosis, sigara böreği, pişi', en: 'French fries, simit, sausages, spring rolls, pişi' } },
@@ -31,11 +31,11 @@ export const menu: Section[] = [
     ],
   },
   {
-    id: 'yumurta', title: { tr: 'Yumurtalı lezzetler', en: 'Egg-based delicacies' }, photo: 'menemen',
+    id: 'yumurta', title: { tr: 'Yumurtalı lezzetler', en: 'Egg dishes' }, photo: 'menemen',
     items: [
       { name: { tr: 'Sahanda yumurta', en: 'Fried eggs' }, photo: 'sahanda-yumurta' },
       { name: { tr: 'Sahanda sucuklu yumurta', en: 'Fried eggs with sausage' }, photo: 'sahanda-sucuklu' },
-      { name: { tr: 'Menemen', en: 'Menemen' }, photo: 'menemen',
+      { name: { tr: 'Menemen', en: 'Menemen (Turkish-style scrambled eggs)' }, photo: 'menemen',
         desc: { tr: 'Domates ve yeşil biberle pişen yumurta', en: 'Eggs cooked with tomatoes and green peppers' } },
       { name: { tr: 'Peynirli omlet', en: 'Omelette with cheese' }, photo: 'omlet-peynirli' },
       { name: { tr: 'Mantarlı omlet', en: 'Omelette with mushrooms' } },
@@ -45,7 +45,7 @@ export const menu: Section[] = [
     ],
   },
   {
-    id: 'tost', title: { tr: 'Tost ve sandviç', en: 'Toast and sandwich' }, photo: 'flamingo-tost',
+    id: 'tost', title: { tr: 'Tost ve sandviç', en: 'Toasties & sandwiches' }, photo: 'flamingo-tost',
     items: [
       { name: { tr: 'Kaşarlı tost', en: 'Kaşar cheese toast' }, photo: 'kasarli-tost' },
       { name: { tr: 'Peynirli tost', en: 'White cheese toast' },
@@ -100,13 +100,13 @@ export const menu: Section[] = [
     ],
   },
   {
-    id: 'makarna', title: { tr: 'Makarnalar', en: 'Pastas' }, photo: 'fettucini',
+    id: 'makarna', title: { tr: 'Makarnalar', en: 'Pasta' }, photo: 'fettucini',
     items: [
       { name: { tr: 'Fettucini Alfredo', en: 'Fettucini Alfredo' }, photo: 'fettucini',
         desc: { tr: 'Krema, kaşar, mantar, tavuk, fesleğen', en: 'Cream, kaşar cheese, mushrooms, chicken, basil' } },
       { name: { tr: 'Penne Arrabiata', en: 'Penne Arrabiata' },
         desc: { tr: 'Acılı domates sos, parmesan, fesleğen', en: 'Spicy tomato sauce, parmesan, basil' } },
-      { name: { tr: 'Napoliten', en: 'Napoliten' },
+      { name: { tr: 'Napoliten', en: 'Napoletana' },
         desc: { tr: 'Domates sos, parmesan, fesleğen', en: 'Tomato sauce, parmesan, basil' } },
       { name: { tr: 'Ev yapımı mantı', en: 'Homemade Turkish ravioli' } },
     ],
@@ -169,7 +169,7 @@ export const menu: Section[] = [
         desc: { tr: 'Fındık kreması ve süt ile', en: 'With hazelnut cream and milk' } },
       { name: { tr: 'Chai tea latte', en: 'Chai tea latte' } },
       { name: { tr: 'Sıcak çikolata', en: 'Hot chocolate' } },
-      { name: { tr: 'Salep', en: 'Salep' } },
+      { name: { tr: 'Salep', en: 'Salep (hot milk drink with orchid root and cinnamon)' } },
     ],
   },
   {
@@ -209,7 +209,7 @@ export const menu: Section[] = [
       { name: { tr: 'Şeftali suyu', en: 'Peach juice' } },
       { name: { tr: 'Soda', en: 'Soda' } },
       { name: { tr: 'Meyveli soda', en: 'Fruit soda' } },
-      { name: { tr: 'Churchill', en: 'Churchill' } },
+      { name: { tr: 'Churchill', en: 'Churchill (lemon juice, soda and salt)' } },
       { name: { tr: 'Su, 50 cl', en: 'Water' } },
       { name: { tr: 'Tonik', en: 'Tonic' } },
       { name: { tr: 'Red Bull', en: 'Red Bull' } },
@@ -242,14 +242,14 @@ export const menu: Section[] = [
     ],
   },
   {
-    id: 'alkol', title: { tr: 'Alkollü içecekler', en: 'Alcohol drinks' },
+    id: 'alkol', title: { tr: 'Alkollü içecekler', en: 'Spirits' },
     items: [
       { name: { tr: 'Chivas Regal', en: 'Chivas Regal' } }, { name: { tr: 'Jack Daniel’s', en: 'Jack Daniel’s' } }, { name: { tr: 'Smirnoff Red', en: 'Smirnoff Red' } }, { name: { tr: 'Gordon’s Gin', en: 'Gordon’s Gin' } },
       { name: { tr: 'Captain Morgan', en: 'Captain Morgan' } }, { name: { tr: 'Baileys', en: 'Baileys' } }, { name: { tr: 'Cardinal Melon', en: 'Cardinal Melon' } },
     ],
   },
   {
-    id: 'raki', title: { tr: 'Rakı', en: 'Rakı' }, note: { tr: 'Tek, duble ya da 70 cl şişe.', en: 'Single, double or a 70 cl bottle.' },
+    id: 'raki', title: { tr: 'Rakı', en: 'Rakı' }, note: { tr: 'Tek, duble ya da 70 cl şişe.', en: 'Aniseed spirit. Single, double or a 70 cl bottle.' },
     items: [{ name: { tr: 'Beylerbeyi Göbek', en: 'Beylerbeyi Göbek' } }, { name: { tr: 'Beylerbeyi Terra Gold', en: 'Beylerbeyi Terra Gold' } }, { name: { tr: 'Yeni Rakı', en: 'Yeni Rakı' } }],
   },
   {
@@ -258,7 +258,7 @@ export const menu: Section[] = [
     items: [
       { name: { tr: 'Kırmızı', en: 'Red' }, photo: 'sarap-kirmizi' },
       { name: { tr: 'Beyaz', en: 'White' }, photo: 'sarap-beyaz' },
-      { name: { tr: 'Rose', en: 'Rose' }, photo: 'sarap-rose' },
+      { name: { tr: 'Rose', en: 'Rosé' }, photo: 'sarap-rose' },
       { name: { tr: 'Sıcak şarap', en: 'Hot wine' } },
       { name: { tr: 'Spritzer', en: 'Spritzer' },
         desc: { tr: 'Beyaz şarap ve soda', en: 'White wine and soda' } },
@@ -295,9 +295,9 @@ export const menu: Section[] = [
     items: [
       { name: { tr: 'Tequila shot', en: 'Tequila shot' } },
       { name: { tr: 'Jägermeister shot', en: 'Jägermeister shot' } },
-      { name: { tr: 'Long Island ice tea shot, 6’lı', en: 'Long Island ice tea shot, 6’lı' } },
-      { name: { tr: 'Margarita shot, 6’lı', en: 'Margarita shot, 6’lı' } },
-      { name: { tr: 'Tequila shot, 6’lı', en: 'Tequila shot, 6’lı' } },
+      { name: { tr: 'Long Island ice tea shot, 6’lı', en: 'Long Island ice tea shot, set of 6' } },
+      { name: { tr: 'Margarita shot, 6’lı', en: 'Margarita shot, set of 6' } },
+      { name: { tr: 'Tequila shot, 6’lı', en: 'Tequila shot, set of 6' } },
     ],
   },
   {

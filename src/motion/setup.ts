@@ -1,7 +1,7 @@
 // Global motion for Flamingo. One driver: scroll progress → --glow (sand to sunset pink).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { onPage, onScroll, setTransition, scrollToTarget, stopScroll, startScroll, ease, isTouch, prefersReducedMotion } from '../engine';
+import { onPage, onScroll, scrollState, setTransition, scrollToTarget, stopScroll, startScroll, ease, isTouch, prefersReducedMotion } from '../engine';
 
 const root = () => document.documentElement;
 
@@ -20,7 +20,7 @@ function startGlow() {
     applyGlow(progress);
     root().classList.toggle('scrolled', y > 8);
   });
-  onPage(() => { shown = -1; applyGlow(0); });
+  onPage(() => { shown = -1; applyGlow(scrollState().progress); }); // 0 after a normal page change; kept on a language switch
 }
 
 // ── Idle: the reflection under the bird ripples (pointer leans it a little) ──
@@ -168,11 +168,24 @@ function startFeed() {
   });
 }
 
+// ── Language switcher: land on the same section in the other language (anchor ids are the same in every language) ──
+function startLangs() {
+  // Capture phase, so the href is set before the router reads it. Same rule as the scroll-spy: the last section past 45%.
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-lang]');
+    if (!a) return;
+    let id = '';
+    if (scrollY > 2) for (const s of document.querySelectorAll<HTMLElement>('[data-section]')) if (s.getBoundingClientRect().top <= innerHeight * 0.45) id = s.id;
+    a.hash = id; // above the first section: no anchor, the page opens at the top
+  }, true);
+}
+
 export function setupMotion() {
   startFeed();
   startGlow();
   startReflection();
   startChips();
   startZoom();
+  startLangs();
   startTide();
 }

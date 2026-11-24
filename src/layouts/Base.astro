@@ -1,7 +1,8 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { site } from '../data/site';
-import { t, type Locale } from '../i18n/ui';
+import { t, native, type Locale } from '../i18n/ui';
 import '../styles/tokens.css';
 import '../styles/engine.css';
 import '../styles/site.css';
@@ -12,8 +13,10 @@ interface Props {
   current?: 'home' | 'menu';
   glow?: number; // pin the page's color (404 stays hungry at 0)
   locale?: Locale; // home and 404 stay Turkish
+  alternates?: Partial<Record<Locale, string>>; // this page in other languages: shows the language switcher
 }
-const { title, description = site.description, current, glow, locale = 'tr' } = Astro.props;
+const { title, description = site.description, current, glow, locale = 'tr', alternates } = Astro.props;
+const menuHref = getRelativeLocaleUrl(locale, 'menu');
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Çalış Sahili, Fethiye`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
@@ -24,9 +27,9 @@ const jsonLd = {
   url: site.url,
   telephone: site.tel,
   image: ogImage,
-  servesCuisine: ['Kahvaltı', 'Burger', 'Makarna', 'Kahve', 'Kokteyl'],
+  servesCuisine: t('ld.cuisine', locale).split(', '),
   openingHours: site.hours.schema,
-  hasMenu: new URL('/menu/', Astro.site ?? site.url).href,
+  hasMenu: new URL(menuHref, Astro.site ?? site.url).href,
   sameAs: [site.instagram.href],
   address: {
     '@type': 'PostalAddress',
@@ -83,9 +86,16 @@ const jsonLd = {
         <span class="brand__name">Flamingo<small>Cafe &amp; Bistro</small><span class="sr-only">{t('nav.home', locale)}</span></span>
       </a>
       <nav class="nav" aria-label={t('nav.label', locale)}>
-        <a href="/menu/" aria-current={current === 'menu' ? 'page' : undefined}><span class="dip"><span>{t('nav.menu', locale)}</span><span aria-hidden="true">{t('nav.menu', locale)}</span></span></a>
+        <a href={menuHref} aria-current={current === 'menu' ? 'page' : undefined}><span class="dip"><span>{t('nav.menu', locale)}</span><span aria-hidden="true">{t('nav.menu', locale)}</span></span></a>
         <a class="nav__hide" href="/#bizi-bul"><span class="dip"><span>{t('nav.find', locale)}</span><span aria-hidden="true">{t('nav.find', locale)}</span></span></a>
         <a class="nav__tel" href={`tel:${site.tel}`}><span class="dip"><span>{t('nav.call', locale)}</span><span aria-hidden="true">{t('nav.call', locale)}</span></span><span class="sr-only">: {site.phone}</span></a>
+        {alternates && (
+          <span class="langs" role="group" aria-label={t('nav.lang', locale)}>
+            {Object.entries(alternates).map(([l, href]) => (
+              <a href={href} hreflang={l} lang={l} aria-label={native[l as Locale]} aria-current={l === locale ? 'true' : undefined} data-lang data-quick data-astro-prefetch="viewport">{l.toUpperCase()}</a>
+            ))}
+          </span>
+        )}
       </nav>
     </header>
     <main id="main" tabindex="-1">
@@ -97,7 +107,7 @@ const jsonLd = {
         <div class="foot__links">
           <a class="btn" href={`tel:${site.tel}`}>{site.phone}</a>
           <a class="btn" href={site.instagram.href} rel="noopener">Instagram</a>
-          <a class="btn" href="/menu/">{t('nav.menu', locale)}</a>
+          <a class="btn" href={menuHref}>{t('nav.menu', locale)}</a>
         </div>
         <div class="foot__small">
           <span>© {new Date().getFullYear()} {site.name} · {site.address.line}</span>

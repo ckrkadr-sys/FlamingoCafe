@@ -2,6 +2,10 @@
 export const locales = ['tr', 'en', 'ru', 'de'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'tr';
+// Languages with built pages; the switcher shows only these (ru, de: no pages yet).
+export const published: Locale[] = ['tr', 'en'];
+// Language names in their own language, for the switcher.
+export const native: Record<Locale, string> = { tr: 'Türkçe', en: 'English', ru: 'Русский', de: 'Deutsch' };
 
 // One piece of text in every language. tr and en are required; ru and de become required in the next phase.
 export type Text = { tr: string; en: string; ru?: string; de?: string };
@@ -18,6 +22,8 @@ export const ui = {
   'nav.menu': { tr: 'Menü', en: 'Menu' },
   'nav.find': { tr: 'Bizi bul', en: 'Find us' },
   'nav.call': { tr: 'Ara', en: 'Call' },
+  'nav.lang': { tr: 'Dil', en: 'Language' },
+  'ld.cuisine': { tr: 'Kahvaltı, Burger, Makarna, Kahve, Kokteyl', en: 'Breakfast, Burgers, Pasta, Coffee, Cocktails' },
   'foot.big': { tr: 'Gece yarısına kadar buradayız.', en: 'We’re here until midnight.' },
   'foot.prices': { tr: 'Fiyatları masada sorabilirsiniz.', en: 'Ask for prices at your table.' },
 

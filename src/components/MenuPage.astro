@@ -4,13 +4,13 @@ import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 import { menu, chip, groups } from '../data/menu';
 import { photo, cutouts } from '../data/photos';
-import { pick, t, type Locale, type Text, type UiKey } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { pick, t, published, type Locale, type Text, type UiKey } from '../i18n/ui';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const p = (text: Text) => pick(text, locale);
-// English line under/after a name; not on the English page, and not when the names are the same.
-const second = (text: Text) => (locale !== 'en' && text.en !== p(text) ? text.en : undefined);
+const alternates = Object.fromEntries(published.map((l) => [l, getRelativeLocaleUrl(l, 'menu')]));
 
 const altFor = (name: string, fallback: string) => {
   for (const s of menu) for (const i of s.items) if (i.photo === name) return i.desc ? `${p(i.name)}: ${p(i.desc).toLowerCase()}` : p(i.name);
@@ -25,6 +25,7 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
   current="menu"
   description={t('menu.description', locale)}
   locale={locale}
+  alternates={alternates}
 >
   <section class="mhero wrap" aria-labelledby="menu-title">
     <div class="grid">
@@ -48,7 +49,6 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
       <div class="grid">
         <div class="msec__head">
           <h2 id={`${s.id}-t`} class="msec__title display">{p(s.title)}</h2>
-          {second(s.title) && <span class="msec__en" lang="en">{second(s.title)}</span>}
         </div>
         {s.note && <p class="msec__note">{p(s.note)}</p>}
         {s.photo && (
@@ -59,7 +59,7 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
         <ul class="items">
           {s.items.map((i) => (
             <li class:list={['item', { 'item--thumb': i.photo }]}>
-              <h3>{p(i.name)}{second(i.name) && <span class="en" lang="en"> / {second(i.name)}</span>}</h3>
+              <h3>{p(i.name)}</h3>
               {i.desc && <p>{p(i.desc)}</p>}
               {i.photo && (
                 <button class:list={['item__zoom', { 'item__zoom--cutout': cutouts.has(i.photo) }]} type="button" aria-label={t('menu.zoom', locale).replace('{name}', p(i.name))} data-full={full[i.photo].src} data-alt={p(i.name)} data-w={full[i.photo].attributes.width} data-h={full[i.photo].attributes.height}>
