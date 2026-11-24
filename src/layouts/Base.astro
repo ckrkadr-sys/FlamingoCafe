@@ -90,11 +90,17 @@ const jsonLd = {
         <a class="nav__hide" href="/#bizi-bul"><span class="dip"><span>{t('nav.find', locale)}</span><span aria-hidden="true">{t('nav.find', locale)}</span></span></a>
         <a class="nav__tel" href={`tel:${site.tel}`}><span class="dip"><span>{t('nav.call', locale)}</span><span aria-hidden="true">{t('nav.call', locale)}</span></span><span class="sr-only">: {site.phone}</span></a>
         {alternates && (
-          <span class="langs" role="group" aria-label={t('nav.lang', locale)}>
-            {Object.entries(alternates).map(([l, href]) => (
-              <a href={href} hreflang={l} lang={l} aria-label={native[l as Locale]} aria-current={l === locale ? 'true' : undefined} data-lang data-quick data-astro-prefetch="viewport">{l.toUpperCase()}</a>
-            ))}
-          </span>
+          <div class="langs" data-langs>
+            {/* Phones: one button with the current language opens the list. Desktop: the list is always shown. */}
+            <button class="langs__toggle" type="button" aria-expanded="false" aria-controls="langs-list" aria-label={`${t('nav.lang', locale)}: ${native[locale]}`} data-langs-toggle>
+              {locale.toUpperCase()}<svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+            </button>
+            <ul class="langs__list" id="langs-list" aria-label={t('nav.lang', locale)}>
+              {Object.entries(alternates).map(([l, href]) => (
+                <li><a href={href} hreflang={l} lang={l} aria-label={native[l as Locale]} aria-current={l === locale ? 'true' : undefined} data-lang data-quick data-astro-prefetch="viewport">{l.toUpperCase()}</a></li>
+              ))}
+            </ul>
+          </div>
         )}
       </nav>
     </header>

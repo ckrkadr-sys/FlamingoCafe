@@ -1,0 +1,16 @@
+# Turkish texts whose Russian version may stay the same (brand names, written in Latin letters).
+# One per line, exactly as in src/data/menu.ts. Used by scripts/check-translations.mjs.
+Fanta
+Sprite
+Red Bull
+Chivas Regal
+Jack Daniel’s
+Smirnoff Red
+Gordon’s Gin
+Captain Morgan
+Baileys
+Cardinal Melon
+Beylerbeyi Göbek
+Beylerbeyi Terra Gold
+Yeni Rakı
+Flamingo Moonlight

@@ -178,6 +178,20 @@ function startLangs() {
     if (scrollY > 2) for (const s of document.querySelectorAll<HTMLElement>('[data-section]')) if (s.getBoundingClientRect().top <= innerHeight * 0.45) id = s.id;
     a.hash = id; // above the first section: no anchor, the page opens at the top
   }, true);
+  // Phones: the current-language button opens the list; Esc, a tap outside or a second tap close it.
+  onPage(() => {
+    const box = document.querySelector<HTMLElement>('[data-langs]');
+    const btn = box?.querySelector<HTMLButtonElement>('[data-langs-toggle]');
+    if (!box || !btn) return;
+    const set = (open: boolean) => { btn.setAttribute('aria-expanded', String(open)); box.toggleAttribute('data-open', open); };
+    const toggle = () => set(btn.getAttribute('aria-expanded') !== 'true');
+    const key = (e: KeyboardEvent) => { if (e.key === 'Escape' && box.hasAttribute('data-open')) { set(false); btn.focus(); } };
+    const outside = (e: Event) => { if (!box.contains(e.target as Node)) set(false); };
+    btn.addEventListener('click', toggle);
+    document.addEventListener('keydown', key);
+    document.addEventListener('pointerdown', outside);
+    return () => { btn.removeEventListener('click', toggle); document.removeEventListener('keydown', key); document.removeEventListener('pointerdown', outside); };
+  });
 }
 
 export function setupMotion() {

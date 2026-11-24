@@ -89,7 +89,9 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 @media (hover: hover) { .nav__tel:hover { color: var(--sand); } .nav__tel:hover::before { translate: 0 0; border-radius: 0; } }
 .nav__tel:focus-visible { color: var(--sand); } .nav__tel:focus-visible::before { translate: 0 0; border-radius: 0; }
 /* Language switcher (menu pages only): the active language underlined like the current page. */
-.langs { display: flex; }
+.langs { position: relative; }
+.langs__toggle { display: none; }
+.langs__list { display: flex; list-style: none; margin: 0; padding: 0; }
 .langs a { justify-content: center; min-width: 44px; color: var(--c-muted); }
 .langs a[aria-current='true'] { color: var(--ink); }
 .nav .langs a[aria-current='true']::after { scale: 1 1; }
@@ -97,7 +99,21 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
   .brand__name small, .nav__hide { display: none; }
   .nav { gap: 0.9rem; }
   /* No room on phones: "Bizi bul" gives way, and only the other language is offered. */
-  .nav:has(.langs) a.nav__hide, .langs a[aria-current='true'] { display: none; }
+  .nav:has(.langs) a.nav__hide { display: none; }
+  /* Russian and German labels are longer: the link to the page you are on gives way (the page title names it). */
+  .nav:has(.langs):is(:lang(ru), :lang(de)) { gap: 0.6rem; }
+  .nav:has(.langs):is(:lang(ru), :lang(de)) > a[aria-current='page'] { display: none; }
+  /* Phones: the current language as a button; the four languages drop down under it. */
+  .langs__toggle { display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; min-width: 44px; min-height: 44px; padding-inline: 0.25rem; }
+  .langs__toggle svg { transition: rotate 0.3s var(--e-dip); }
+  .langs__toggle[aria-expanded='true'] svg { rotate: 180deg; }
+  .langs__list {
+    display: none; position: absolute; top: calc(100% + 0.4rem); right: 0; z-index: 1; flex-direction: column; min-width: 5.5rem;
+    padding-block: 0.3rem; background: var(--c-bg); border: 1.5px solid var(--ink); border-radius: 0.75rem; box-shadow: 0 10px 24px rgb(35 33 34 / 0.12);
+  }
+  .langs[data-open] .langs__list { display: flex; }
+  .langs__list a { justify-content: flex-start; padding-inline: 1rem; }
+  .nav .langs__list a::after { left: 1rem; right: auto; width: 1.4em; }
 }
 
 /* ── Hero (home) ── */
@@ -221,6 +237,10 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .msec:first-of-type { border-top: 0; }
 .msec__head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2em 0.6em; margin-bottom: calc(var(--u) * 3); }
 .msec__title { font-size: var(--t-xl); }
+/* German and Russian run longer: titles a size down, long words hyphenate or break instead of overflowing. */
+.msec__title:is(:lang(de), :lang(ru)) { font-size: clamp(2.2rem, 1.2rem + 4.4vw, 5.5rem); }
+:is(.msec__title, .item h3, .mend__big):is(:lang(de), :lang(ru)) { hyphens: auto; overflow-wrap: break-word; }
+.mhero__title:lang(de) { font-size: min(12.5vw, 11.5rem); } /* "Speisekarte" on one line */
 .msec__note { grid-column: 1 / -1; margin-top: calc(var(--u) * -1.5); margin-bottom: calc(var(--u) * 3); color: var(--c-muted); max-width: 60ch; }
 /* The whole photo, never cropped: its own ratio, tall ones capped and contained. */
 .msec__photo { grid-column: 1 / span 5; align-self: start; }
