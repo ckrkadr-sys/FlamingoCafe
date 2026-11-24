@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import { site } from '../data/site';
+import { t, type Locale } from '../i18n/ui';
 import '../styles/tokens.css';
 import '../styles/engine.css';
 import '../styles/site.css';
@@ -10,8 +11,9 @@ interface Props {
   description?: string;
   current?: 'home' | 'menu';
   glow?: number; // pin the page's color (404 stays hungry at 0)
+  locale?: Locale; // home and 404 stay Turkish
 }
-const { title, description = site.description, current, glow } = Astro.props;
+const { title, description = site.description, current, glow, locale = 'tr' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Çalış Sahili, Fethiye`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
@@ -36,7 +38,7 @@ const jsonLd = {
 };
 ---
 <!doctype html>
-<html lang="tr" transition:animate="none" data-glow={glow} data-page={current}>
+<html lang={locale} transition:animate="none" data-glow={glow} data-page={current}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -49,7 +51,7 @@ const jsonLd = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:locale" content={t('og.locale', locale)} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -71,19 +73,19 @@ const jsonLd = {
     <ClientRouter fallback="swap" />
   </head>
   <body>
-    <a class="skip-link" href="#main">İçeriğe geç</a>
+    <a class="skip-link" href="#main">{t('skip', locale)}</a>
     <div id="curtain" transition:persist="curtain" aria-hidden="true">
       <div class="curtain__panel"><span class="mark curtain__bird"></span></div>
     </div>
     <header class="hdr">
       <a class="brand" href="/">
         <span class="mark" aria-hidden="true"></span>
-        <span class="brand__name">Flamingo<small>Cafe &amp; Bistro</small><span class="sr-only">, ana sayfa</span></span>
+        <span class="brand__name">Flamingo<small>Cafe &amp; Bistro</small><span class="sr-only">{t('nav.home', locale)}</span></span>
       </a>
-      <nav class="nav" aria-label="Ana menü">
-        <a href="/menu/" aria-current={current === 'menu' ? 'page' : undefined}><span class="dip"><span>Menü</span><span aria-hidden="true">Menü</span></span></a>
-        <a class="nav__hide" href="/#bizi-bul"><span class="dip"><span>Bizi bul</span><span aria-hidden="true">Bizi bul</span></span></a>
-        <a class="nav__tel" href={`tel:${site.tel}`}><span class="dip"><span>Ara</span><span aria-hidden="true">Ara</span></span><span class="sr-only">: {site.phone}</span></a>
+      <nav class="nav" aria-label={t('nav.label', locale)}>
+        <a href="/menu/" aria-current={current === 'menu' ? 'page' : undefined}><span class="dip"><span>{t('nav.menu', locale)}</span><span aria-hidden="true">{t('nav.menu', locale)}</span></span></a>
+        <a class="nav__hide" href="/#bizi-bul"><span class="dip"><span>{t('nav.find', locale)}</span><span aria-hidden="true">{t('nav.find', locale)}</span></span></a>
+        <a class="nav__tel" href={`tel:${site.tel}`}><span class="dip"><span>{t('nav.call', locale)}</span><span aria-hidden="true">{t('nav.call', locale)}</span></span><span class="sr-only">: {site.phone}</span></a>
       </nav>
     </header>
     <main id="main" tabindex="-1">
@@ -91,15 +93,15 @@ const jsonLd = {
     </main>
     <footer class="foot wrap">
       <div class="grid">
-        <p class="foot__big display">Gece yarısına kadar buradayız.</p>
+        <p class="foot__big display">{t('foot.big', locale)}</p>
         <div class="foot__links">
           <a class="btn" href={`tel:${site.tel}`}>{site.phone}</a>
           <a class="btn" href={site.instagram.href} rel="noopener">Instagram</a>
-          <a class="btn" href="/menu/">Menü</a>
+          <a class="btn" href="/menu/">{t('nav.menu', locale)}</a>
         </div>
         <div class="foot__small">
           <span>© {new Date().getFullYear()} {site.name} · {site.address.line}</span>
-          <span>Fiyatları masada sorabilirsiniz.</span>
+          <span>{t('foot.prices', locale)}</span>
         </div>
       </div>
       <span class="mark mark--pink foot__bird" aria-hidden="true"></span>

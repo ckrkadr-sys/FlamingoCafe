@@ -1,0 +1,88 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { menu, chip, groups } from '../data/menu';
+import { photo, cutouts } from '../data/photos';
+import { pick, t, type Locale, type Text, type UiKey } from '../i18n/ui';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const p = (text: Text) => pick(text, locale);
+// English line under/after a name; not on the English page, and not when the names are the same.
+const second = (text: Text) => (locale !== 'en' && text.en !== p(text) ? text.en : undefined);
+
+const altFor = (name: string, fallback: string) => {
+  for (const s of menu) for (const i of s.items) if (i.photo === name) return i.desc ? `${p(i.name)}: ${p(i.desc).toLowerCase()}` : p(i.name);
+  return fallback;
+};
+// Full-size view for the thumbnail dialog: built here, fetched only when the dialog opens.
+const thumbs = new Set(menu.flatMap((s) => s.items.filter((i) => i.photo).map((i) => i.photo!)));
+const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [p, await getImage({ src: photo(p), width: 900, format: 'webp' })])));
+---
+<Base
+  title={t('menu.title', locale)}
+  current="menu"
+  description={t('menu.description', locale)}
+  locale={locale}
+>
+  <section class="mhero wrap" aria-labelledby="menu-title">
+    <div class="grid">
+      <h1 id="menu-title" class="mhero__title display" data-split="chars" data-intro>{t('menu.title', locale)}</h1>
+    </div>
+  </section>
+
+  <nav class="chips" aria-label={t('menu.sections', locale)} data-chips data-active={groups[0].id}>
+    <ul class="chips__groups">
+      {groups.map((g) => <li><a href={`#${g.ids[0]}`} data-group={g.id}>{t(`group.${g.id}` as UiKey, locale)}</a></li>)}
+    </ul>
+    {groups.map((g) => (
+      <ul class="chips__row" data-row={g.id} aria-label={t(`group.${g.id}` as UiKey, locale)} hidden={g !== groups[0]}>
+        {g.ids.map((id) => <li><a href={`#${id}`} data-chip={id}><span class="dip"><span>{p(chip[id])}</span><span aria-hidden="true">{p(chip[id])}</span></span></a></li>)}
+      </ul>
+    ))}
+  </nav>
+
+  {menu.map((s, n) => (
+    <section id={s.id} class:list={['msec wrap', { 'msec--plain': !s.photo }]} aria-labelledby={`${s.id}-t`} data-section data-in={groups.find((g) => g.ids.includes(s.id))!.id}>
+      <div class="grid">
+        <div class="msec__head">
+          <h2 id={`${s.id}-t`} class="msec__title display">{p(s.title)}</h2>
+          {second(s.title) && <span class="msec__en" lang="en">{second(s.title)}</span>}
+        </div>
+        {s.note && <p class="msec__note">{p(s.note)}</p>}
+        {s.photo && (
+          <figure class:list={['msec__photo', { 'msec__photo--cutout': cutouts.has(s.photo) }]}>
+            <Image src={photo(cutouts.has(s.photo) ? `${s.photo}-cutout` : s.photo)} alt={altFor(s.photo, p(s.title))} format="webp" widths={[480, 800, 1100]} sizes="(max-width: 767px) calc(100vw - 2rem), 40vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
+          </figure>
+        )}
+        <ul class="items">
+          {s.items.map((i) => (
+            <li class:list={['item', { 'item--thumb': i.photo }]}>
+              <h3>{p(i.name)}{second(i.name) && <span class="en" lang="en"> / {second(i.name)}</span>}</h3>
+              {i.desc && <p>{p(i.desc)}</p>}
+              {i.photo && (
+                <button class:list={['item__zoom', { 'item__zoom--cutout': cutouts.has(i.photo) }]} type="button" aria-label={t('menu.zoom', locale).replace('{name}', p(i.name))} data-full={full[i.photo].src} data-alt={p(i.name)} data-w={full[i.photo].attributes.width} data-h={full[i.photo].attributes.height}>
+                  {cutouts.has(i.photo)
+                    ? <Image src={photo(`${i.photo}-cutout`)} alt="" widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />
+                    : <Image src={photo(i.photo)} alt="" width={224} height={224} widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <dialog class="zoom" aria-label={t('menu.dialog', locale)} data-zoom>
+    <button class="zoom__close" type="button" aria-label={t('menu.close', locale)} data-zoom-close><span aria-hidden="true">×</span></button>
+    <img alt="" />
+  </dialog>
+
+  <section class="mend wrap" aria-labelledby="end-title">
+    <h2 id="end-title" class="mend__big display">{t('menu.end.title', locale)}</h2>
+    <p>{t('menu.end.text', locale)} <a class="link" href={site.instagram.href} rel="noopener">{site.instagram.handle}</a></p>
+    <a class="btn btn--solid" href={`tel:${site.tel}`}>{t('menu.end.call', locale)} {site.phone}</a>
+  </section>
+</Base>
