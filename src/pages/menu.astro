@@ -3,7 +3,7 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 import { menu, chip, groups } from '../data/menu';
-import { photo } from '../data/photos';
+import { photo, cutouts } from '../data/photos';
 
 const altFor = (name: string, fallback: string) => {
   for (const s of menu) for (const i of s.items) if (i.photo === name) return i.desc ? `${i.tr}: ${i.desc.toLowerCase()}` : i.tr;
@@ -49,8 +49,8 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
         </div>
         {s.note && <p class="msec__note">{s.note}</p>}
         {s.photo && (
-          <figure class="msec__photo">
-            <Image src={photo(s.photo)} alt={altFor(s.photo, s.tr)} widths={[480, 800, 1100]} sizes="(max-width: 767px) calc(100vw - 2rem), 40vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
+          <figure class:list={['msec__photo', { 'msec__photo--cutout': cutouts.has(s.photo) }]}>
+            <Image src={photo(cutouts.has(s.photo) ? `${s.photo}-cutout` : s.photo)} alt={altFor(s.photo, s.tr)} format="webp" widths={[480, 800, 1100]} sizes="(max-width: 767px) calc(100vw - 2rem), 40vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
           </figure>
         )}
         <ul class="items">
@@ -59,8 +59,10 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
               <h3>{i.tr}{i.en && <span class="en" lang="en"> / {i.en}</span>}</h3>
               {i.desc && <p>{i.desc}</p>}
               {i.photo && i.photo !== s.photo && (
-                <button class="item__zoom" type="button" aria-label={`${i.tr} görselini büyüt`} data-full={full[i.photo].src} data-alt={i.tr} data-w={full[i.photo].attributes.width} data-h={full[i.photo].attributes.height}>
-                  <Image src={photo(i.photo)} alt="" width={224} height={224} widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />
+                <button class:list={['item__zoom', { 'item__zoom--cutout': cutouts.has(i.photo) }]} type="button" aria-label={`${i.tr} görselini büyüt`} data-full={full[i.photo].src} data-alt={i.tr} data-w={full[i.photo].attributes.width} data-h={full[i.photo].attributes.height}>
+                  {cutouts.has(i.photo)
+                    ? <Image src={photo(`${i.photo}-cutout`)} alt="" widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />
+                    : <Image src={photo(i.photo)} alt="" width={224} height={224} widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />}
                 </button>
               )}
             </li>

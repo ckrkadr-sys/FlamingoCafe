@@ -70,6 +70,8 @@ function startChips() {
       rows.forEach((ul) => (ul.hidden = ul.dataset.row !== group));
       const g = bar.querySelector<HTMLElement>(`[data-group="${group}"]`)!;
       const a = bar.querySelector<HTMLElement>(`[data-chip="${s.id}"]`)!;
+      // New group: its chip row starts from the left before the active chip is centred.
+      if (group !== bar.dataset.active) { a.closest('ul')!.scrollLeft = 0; bar.dataset.active = group; }
       g.setAttribute('aria-current', 'true');
       a.setAttribute('aria-current', 'true');
       center(g.closest('ul')!, g);

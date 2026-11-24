@@ -223,6 +223,8 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 /* The whole photo, never cropped: its own ratio, tall ones capped and contained. */
 .msec__photo { grid-column: 1 / span 5; align-self: start; }
 .msec__photo img { width: 100%; height: auto; max-height: 70vh; object-fit: contain; object-position: left top; }
+/* Cutouts lose their floor shadow: a faint one keeps them on the table. */
+.msec__photo--cutout img { filter: drop-shadow(0 14px 18px rgb(35 33 34 / 0.14)) drop-shadow(0 2px 3px rgb(35 33 34 / 0.08)); }
 .items { list-style: none; margin: 0; padding: 0; grid-column: 7 / span 6; }
 .msec--plain .items { grid-column: 1 / -1; columns: 3 16rem; column-gap: calc(var(--gutter) * 2); }
 .item { --thumb: 7rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto 1fr; gap: 0.25rem 1rem; padding-block: 1rem; border-bottom: 1px solid var(--c-line); break-inside: avoid; }
@@ -236,10 +238,15 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .item__zoom { grid-column: 2; grid-row: 1 / span 2; align-self: start; width: var(--thumb); height: var(--thumb); padding: 0; overflow: clip; cursor: zoom-in; }
 .item__zoom img { width: 100%; height: 100%; object-fit: cover; transition: scale 0.9s var(--e-out); }
 @media (hover: hover) { .item__zoom:hover img { scale: 1.06; } }
+/* Cutout thumbnails: the whole dish, uncropped, with the section photos' soft shadow. */
+.item__zoom--cutout { overflow: visible; }
+.item__zoom--cutout img { object-fit: contain; filter: drop-shadow(0 6px 8px rgb(35 33 34 / 0.14)) drop-shadow(0 1px 2px rgb(35 33 34 / 0.08)); }
 @media (max-width: 767px) {
   .item { --thumb: 5rem; }
   .msec__photo { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 3); }
   .msec__photo img { max-height: none; }
+  /* Trimmed cutouts can be very tall (the wine glass): keep them within the screen, centred. */
+  .msec__photo--cutout img { max-height: 60svh; object-position: center top; }
   .items { grid-column: 1 / -1; }
   .msec--plain .items { columns: 1; }
 }

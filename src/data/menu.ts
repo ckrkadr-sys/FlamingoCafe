@@ -109,16 +109,6 @@ export const menu: Section[] = [
     ],
   },
   {
-    id: 'tatli', tr: 'Tatlılar', en: 'Desserts', photo: 'mozaik-pasta',
-    items: [
-      { tr: 'Frambuazlı cheesecake', en: 'Raspberry cheesecake' },
-      { tr: 'San Sebastian cheesecake' },
-      { tr: 'Ev yapımı mozaik pasta', photo: 'mozaik-pasta', en: 'Homemade mosaic cake', desc: 'Bir top dondurma ile servis edilir' },
-      { tr: 'Pankek', photo: 'pankek', en: 'Pancake' },
-      { tr: 'Dondurma', en: 'Ice cream', desc: 'Bir top' },
-    ],
-  },
-  {
     id: 'cay', tr: 'Çaylar', en: 'Tea',
     items: [
       { tr: 'Demleme çay', en: 'Brewed tea' },
@@ -263,15 +253,25 @@ export const menu: Section[] = [
       { tr: 'Tequila shot, 6’lı' },
     ],
   },
+  {
+    id: 'tatli', tr: 'Tatlılar', en: 'Desserts', photo: 'mozaik-pasta',
+    items: [
+      { tr: 'Frambuazlı cheesecake', en: 'Raspberry cheesecake' },
+      { tr: 'San Sebastian cheesecake' },
+      { tr: 'Ev yapımı mozaik pasta', photo: 'mozaik-pasta', en: 'Homemade mosaic cake', desc: 'Bir top dondurma ile servis edilir' },
+      { tr: 'Pankek', photo: 'pankek', en: 'Pancake' },
+      { tr: 'Dondurma', en: 'Ice cream', desc: 'Bir top' },
+    ],
+  },
 ];
 
 // Top row of the sticky bar: sections grouped in page order.
 export const groups = [
   { id: 'yiyecek', label: 'Yiyecek', ids: ['kahvalti', 'yumurta', 'tost', 'atistirmalik', 'ozel', 'burger', 'makarna', 'kase', 'salata'] },
-  { id: 'tatli', label: 'Tatlı', ids: ['tatli'] },
-  { id: 'sicak', label: 'Sıcak içecek', ids: ['cay', 'sicak-kahve', 'alkollu-kahve'] },
-  { id: 'soguk', label: 'Soğuk içecek', ids: ['soguk-kahve', 'serinletici', 'soguk-icecek'] },
+  { id: 'kahve-cay', label: 'Kahve & çay', ids: ['cay', 'sicak-kahve', 'alkollu-kahve', 'soguk-kahve'] },
+  { id: 'icecek', label: 'İçecekler', ids: ['serinletici', 'soguk-icecek'] },
   { id: 'alkol', label: 'Alkol', ids: ['bira', 'alkol', 'raki', 'sarap', 'kokteyl', 'shot'] },
+  { id: 'tatli', label: 'Tatlı', ids: ['tatli'] },
 ];
 // Every section in exactly one group, in page order (fails the build otherwise).
 if (groups.flatMap((g) => g.ids).join() !== menu.map((s) => s.id).join()) throw new Error('menu groups out of sync with sections');
