@@ -18,7 +18,7 @@ export const menu: Section[] = [
       { tr: 'Sosis tabağı', en: 'Sausage plate' },
       { tr: 'Sigara böreği', photo: 'sigara-boregi', en: 'Spring rolls' },
       { tr: 'Sahanda ızgara sucuk', photo: 'sahanda-sucuk', en: 'Fried sausage' },
-      { tr: 'Pankek', photo: 'pankek-kahvalti', en: 'Pancake' },
+      { tr: 'Pankek', photo: 'pankek', en: 'Pancake' },
       { tr: 'Smoothie bowl', photo: 'smoothie-bowl', desc: 'Mevsim meyveleri, yulaf, yoğurt veya süt, bal, fıstık ezmesi, ceviz' },
     ],
   },

@@ -13,10 +13,9 @@ Models download once to ~/.u2net (outside the project).
 Light plates and boards on a light backdrop often come out half-transparent or missing.
 --solid T makes the mask hard: each model's mask is cut at alpha > T, the masks are unioned,
 specks dropped, gaps and inner holes filled, and the edge softened by ~1px. Combinations that worked:
-    --model isnet-general-use,birefnet-general --solid 24   (fettucini, peynir-tabagi)
-    --model bria-rmbg --solid 64                             (tavuk-bowl, flamingo-tost, kahvalti-sepeti, simit-tabagi,
-                                                              pisi-tabagi, pankek-kahvalti, smoothie-bowl)
-    --model isnet-general-use                                (sahanda-sucuk: keeps the holes in the handles)
+    --model isnet-general-use,birefnet-general --solid 24   (fettucini, peynir-tabagi, omlet-mantarli-kasarli)
+    --model bria-rmbg --solid 64                             (most thumbnails: plates, boards, bowls, glasses)
+    --model isnet-general-use                                (sahanda-*: keeps the holes in the pan handles)
     --model bria-rmbg,isnet-general-use --solid 24 --paper 60  (sigara-boregi: paper liner)
 """
 import argparse

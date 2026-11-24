@@ -14,5 +14,9 @@ export const cutouts = new Set([
   'kahvalti-iki-kisilik', 'menemen', 'flamingo-tost', 'peynir-tabagi', 'citir-tavuk',
   'chili-burger', 'fettucini', 'tavuk-bowl', 'mozaik-pasta', 'sarap-kirmizi',
   // Breakfast thumbnails
-  'kahvalti-sepeti', 'simit-tabagi', 'pisi-tabagi', 'sigara-boregi', 'sahanda-sucuk', 'pankek-kahvalti', 'smoothie-bowl',
+  'kahvalti-sepeti', 'simit-tabagi', 'pisi-tabagi', 'sigara-boregi', 'sahanda-sucuk', 'smoothie-bowl',
+  // Other thumbnails
+  'sahanda-yumurta', 'sahanda-sucuklu', 'omlet-peynirli', 'omlet-mantarli-kasarli', 'omlet-avokado', 'kasarli-tost',
+  'karisik-tost', 'cheeseburger', 'citir-tavuk-burger', 'sinitzel', 'fish-chips', 'kofte-wrap', 'tavuk-wrap',
+  'kofte-bowl', 'sade-bowl', 'sarap-beyaz', 'sarap-rose', 'pankek',
 ]);
