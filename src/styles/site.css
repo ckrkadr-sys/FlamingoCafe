@@ -187,11 +187,8 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 /* ── Menu page ── */
 .mhero { padding-block: clamp(2rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem); }
 .mhero__title { grid-column: 1 / span 8; font-size: min(17vw, 19rem); white-space: nowrap; margin-left: -0.04em; }
-.mhero__text { grid-column: 9 / span 4; align-self: end; display: grid; gap: 1rem; font-size: var(--t-body); }
-.mhero__text strong { font-weight: 650; }
 @media (max-width: 767px) {
   .mhero__title { grid-column: 1 / -1; font-size: 30vw; }
-  .mhero__text { grid-column: 1 / -1; margin-top: calc(var(--u) * 2); }
 }
 
 /* Menu text reads on sand and on the sunset it turns into: muted darkened to 9.8:1 / 6.4:1. */
