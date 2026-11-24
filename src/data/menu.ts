@@ -265,6 +265,17 @@ export const menu: Section[] = [
   },
 ];
 
+// Top row of the sticky bar: sections grouped in page order.
+export const groups = [
+  { id: 'yiyecek', label: 'Yiyecek', ids: ['kahvalti', 'yumurta', 'tost', 'atistirmalik', 'ozel', 'burger', 'makarna', 'kase', 'salata'] },
+  { id: 'tatli', label: 'Tatlı', ids: ['tatli'] },
+  { id: 'sicak', label: 'Sıcak içecek', ids: ['cay', 'sicak-kahve', 'alkollu-kahve'] },
+  { id: 'soguk', label: 'Soğuk içecek', ids: ['soguk-kahve', 'serinletici', 'soguk-icecek'] },
+  { id: 'alkol', label: 'Alkol', ids: ['bira', 'alkol', 'raki', 'sarap', 'kokteyl', 'shot'] },
+];
+// Every section in exactly one group, in page order (fails the build otherwise).
+if (groups.flatMap((g) => g.ids).join() !== menu.map((s) => s.id).join()) throw new Error('menu groups out of sync with sections');
+
 // Chip labels for the sticky bar (short).
 export const chip: Record<string, string> = {
   kahvalti: 'Kahvaltı', yumurta: 'Yumurta', tost: 'Tost', atistirmalik: 'Atıştırmalık', ozel: 'Flamingo özel',

@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 import { menu } from '../data/menu';
@@ -65,40 +65,15 @@ const rows = await Promise.all(
     </div>
   </section>
 
-  <section class="specials wrap" aria-labelledby="sp-title">
-    <div class="grid">
-      <h2 id="sp-title" class="specials__head display" data-split="lines">Adını bizden alan tabaklar</h2>
-  
-      <a class="dish w1" href="/menu/#ozel" data-reveal="clip">
-        <figure>
-          <div class="dish__frame"><Image src={photo('citir-tavuk')} alt="Tel sepette Flamingo çıtır tavuk parçaları ve patates kızartması" widths={[480, 720, 960]} sizes="(max-width: 767px) 92vw, 40vw" /></div>
-          <figcaption><span class="dish__name">Flamingo çıtır tavuk parçaları</span><span class="dish__desc">Tel sepette çıtır tavuk ve patates. Masaya ortaya da söylenir.</span></figcaption>
-        </figure>
-      </a>
-      <a class="dish w2" href="/menu/#tost" data-reveal="clip">
-        <figure>
-          <div class="dish__frame"><Image src={photo('flamingo-tost')} alt="Ahşap tahtada pembe flamingo kürdanlı Flamingo tost, patates, domates ve salatalık" widths={[480, 800, 1200]} sizes="(max-width: 767px) 80vw, 48vw" /></div>
-          <figcaption><span class="dish__name">Flamingo tost</span><span class="dish__desc">Özel sos, kaşar, sucuk, cheddar, domates ve turşu.</span></figcaption>
-        </figure>
-      </a>
-      <a class="dish w3" href="/menu/#burger" data-reveal="clip">
-        <figure>
-          <div class="dish__frame"><Image src={photo('chili-burger')} alt="Üzerinde pembe flamingo kürdanıyla Flamingo chilli burger ve patates" widths={[400, 640, 800]} sizes="(max-width: 767px) 80vw, 32vw" /></div>
-          <figcaption><span class="dish__name">Flamingo chilli burger</span><span class="dish__desc">Acılı burger, yanında patates. Kürdandaki kuşu biz koyduk.</span></figcaption>
-        </figure>
-      </a>
-    </div>
-  </section>
-
   <section class="day wrap" aria-labelledby="day-title">
     <div class="day__head">
       <h2 id="day-title" class="day__title display" data-split="lines">Menü, sabahtan geceye</h2>
       <p class="muted">Kahvaltı gün boyu var. Sıra, günün sırası.</p>
     </div>
-    <ul class="day__list" data-index>
+    <ul class="day__list">
       {rows.map((r) => (
         <li>
-          <a class="row" href={r.href} data-preview={r.preview} style={`--tint:${r.tint}`}>
+          <a class="row" href={r.href} style={`--tint:${r.tint}`}>
             <span class="row__dot" aria-hidden="true"></span>
             <span class="row__name"><span class="dip"><span>{r.name}</span><span aria-hidden="true">{r.name}</span></span></span>
             <span class="row__meta">{r.count} çeşit</span>
@@ -107,7 +82,6 @@ const rows = await Promise.all(
         </li>
       ))}
     </ul>
-    <div class="preview" aria-hidden="true"><img alt="" width="480" height="600" /></div>
   </section>
 
   <section id="bizi-bul" class="visit wrap" aria-labelledby="visit-title">

@@ -1,7 +1,7 @@
 // Global motion for Flamingo. One driver: scroll progress → --glow (sand to sunset pink).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { onPage, onScroll, setTransition, scrollToTarget, ease, isTouch, prefersReducedMotion } from '../engine';
+import { onPage, onScroll, setTransition, scrollToTarget, stopScroll, startScroll, ease, isTouch, prefersReducedMotion } from '../engine';
 
 const root = () => document.documentElement;
 
@@ -47,83 +47,90 @@ function startReflection() {
   });
 }
 
-// ── Menu chips: jump to a section, mark the one being read ──
+// ── Menu bar: groups on top, the active group's sections below; jump to a section, mark the one being read ──
 function startChips() {
   onPage(() => {
     const bar = document.querySelector<HTMLElement>('[data-chips]');
     if (!bar) return;
-    const list = bar.querySelector('ul')!;
+    const rows = [...bar.querySelectorAll<HTMLElement>('[data-row]')];
+    const lists = [...bar.querySelectorAll<HTMLElement>('ul')];
+    // Sticky offsets (photo top, scroll-margin) follow the bar's real height.
+    const sizeObs = new ResizeObserver(() => root().style.setProperty('--nav', `${bar.offsetHeight}px`));
+    sizeObs.observe(bar);
     const offset = () => (parseFloat(getComputedStyle(root()).getPropertyValue('--hdr')) || 4) * 16 + bar.offsetHeight - 1;
-    const setCurrent = (id: string) => {
+    // Right-edge fade only while a row has more to scroll.
+    const fade = (ul: HTMLElement) => ul.toggleAttribute('data-more', ul.scrollLeft + ul.clientWidth < ul.scrollWidth - 2);
+    const onListScroll = (e: Event) => fade(e.currentTarget as HTMLElement);
+    lists.forEach((ul) => ul.addEventListener('scroll', onListScroll, { passive: true }));
+    const center = (ul: HTMLElement, a: HTMLElement) =>
+      ul.scrollTo({ left: a.offsetLeft - ul.clientWidth / 2 + a.offsetWidth / 2, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    const setCurrent = (s: HTMLElement) => {
+      const group = s.dataset.in!;
       bar.querySelectorAll('a[aria-current]').forEach((a) => a.removeAttribute('aria-current'));
-      const a = bar.querySelector<HTMLElement>(`[data-chip="${id}"]`);
-      if (!a) return;
+      rows.forEach((ul) => (ul.hidden = ul.dataset.row !== group));
+      const g = bar.querySelector<HTMLElement>(`[data-group="${group}"]`)!;
+      const a = bar.querySelector<HTMLElement>(`[data-chip="${s.id}"]`)!;
+      g.setAttribute('aria-current', 'true');
       a.setAttribute('aria-current', 'true');
-      list.scrollTo({ left: a.offsetLeft - list.clientWidth / 2 + a.offsetWidth / 2, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      center(g.closest('ul')!, g);
+      center(a.closest('ul')!, a);
+      lists.forEach(fade);
     };
-    // Current = the last section whose top passed 45% of the viewport (fast scrolls can't skip one).
+    // Current = the last section whose top passed 45% of the viewport; the observer fires on each crossing.
     const sections = [...document.querySelectorAll<HTMLElement>('[data-section]')];
-    let cur = '';
+    let cur: HTMLElement | undefined;
     const track = () => {
       const line = innerHeight * 0.45;
-      let id = sections[0]?.id ?? '';
-      for (const s of sections) if (s.getBoundingClientRect().top <= line) id = s.id;
-      if (id !== cur) setCurrent((cur = id));
+      let s = sections[0];
+      for (const el of sections) if (el.getBoundingClientRect().top <= line) s = el;
+      if (s && s !== cur) setCurrent((cur = s));
     };
-    const offTrack = onScroll(track);
+    const io = new IntersectionObserver(track, { rootMargin: '0px 0px -55% 0px' });
+    sections.forEach((s) => io.observe(s));
     track();
     const click = (e: Event) => {
-      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-chip]');
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!a) return;
       e.preventDefault();
-      scrollToTarget(`#${a.dataset.chip}`, { offset: offset() });
-      history.replaceState(history.state, '', `#${a.dataset.chip}`);
+      const hash = a.getAttribute('href')!;
+      scrollToTarget(hash, { offset: offset() });
+      history.replaceState(history.state, '', hash);
     };
     bar.addEventListener('click', click);
     // Arriving from the home index with a hash: land on that section under the sticky bars.
     if (location.hash && document.querySelector(location.hash)) {
       requestAnimationFrame(() => scrollToTarget(location.hash, { offset: offset(), immediate: true }));
     }
-    return () => { bar.removeEventListener('click', click); offTrack(); };
+    return () => {
+      bar.removeEventListener('click', click); io.disconnect(); sizeObs.disconnect();
+      lists.forEach((ul) => ul.removeEventListener('scroll', onListScroll));
+    };
   });
 }
 
-// ── Home index: the plate follows the pointer (fine pointers); touch rows carry inline thumbs ──
-function startPreview() {
+// ── Menu thumbnails: open the whole photo in a native dialog (the full file loads only on open) ──
+function startZoom() {
   onPage(() => {
-    const list = document.querySelector('[data-index]');
-    const box = document.querySelector<HTMLElement>('.preview');
-    if (!list || !box || isTouch()) return;
-    const img = box.querySelector('img')!;
-    const x = gsap.quickTo(box, 'x', { duration: 0.6, ease: 'power3.out' });
-    const y = gsap.quickTo(box, 'y', { duration: 0.6, ease: 'power3.out' });
-    const rot = gsap.quickTo(box, 'rotate', { duration: 0.8, ease: 'power3.out' });
-    let lastX = 0, px = 0, py = 0;
-    const move = (e: PointerEvent) => {
-      px = e.clientX; py = e.clientY;
-      x(px); y(py); rot(gsap.utils.clamp(-10, 10, (px - lastX) * 0.5)); lastX = px;
+    const dlg = document.querySelector<HTMLDialogElement>('[data-zoom]');
+    if (!dlg) return;
+    const img = dlg.querySelector('img')!;
+    const open = (e: Event) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-full]');
+      if (!b) return;
+      img.width = +b.dataset.w!; img.height = +b.dataset.h!;
+      img.alt = b.dataset.alt!; img.src = b.dataset.full!;
+      stopScroll();
+      dlg.showModal();
     };
-    // The plate dips in from below the waterline, like everything else here.
-    let moved = false;
-    list.addEventListener('pointermove', () => { moved = true; }, { passive: true });
-    const show = (e: PointerEvent) => {
-      if (!moved) return; // a scroll under a still pointer fires pointerenter too: wait for a real move
-      px = e.clientX; py = e.clientY; gsap.set(box, { x: px, y: py });
-      img.src = (e.currentTarget as HTMLElement).dataset.preview!;
-      gsap.fromTo(box, { autoAlpha: 1, clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.6, ease: ease.out, overwrite: true });
-    };
-    const hide = () => gsap.to(box, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.45, ease: ease.soft, overwrite: true, onComplete: () => gsap.set(box, { autoAlpha: 0 }) });
-    const links = [...list.querySelectorAll<HTMLAnchorElement>('a[data-preview]')];
-    links.forEach((a) => { a.addEventListener('pointerenter', show); a.addEventListener('pointerleave', hide); });
-    list.addEventListener('pointerleave', hide);
-    addEventListener('pointermove', move);
-    links.forEach((a) => { const i = new Image(); i.src = a.dataset.preview!; });
-    const off = onScroll(() => { moved = false; hide(); });
-    ScrollTrigger.create({ trigger: list, start: 'top bottom', end: 'bottom top', onLeave: hide, onLeaveBack: hide });
+    // Esc closes natively; the X and a click on the backdrop (the dialog box itself, outside the photo) close too.
+    const click = (e: Event) => { if (e.target === dlg || (e.target as HTMLElement).closest('[data-zoom-close]')) dlg.close(); };
+    const closed = () => startScroll();
+    document.addEventListener('click', open);
+    dlg.addEventListener('click', click);
+    dlg.addEventListener('close', closed);
     return () => {
-      removeEventListener('pointermove', move); off();
-      links.forEach((a) => { a.removeEventListener('pointerenter', show); a.removeEventListener('pointerleave', hide); });
-      list.removeEventListener('pointerleave', hide);
+      document.removeEventListener('click', open); dlg.removeEventListener('click', click); dlg.removeEventListener('close', closed);
+      if (dlg.open) dlg.close();
     };
   });
 }
@@ -164,6 +171,6 @@ export function setupMotion() {
   startGlow();
   startReflection();
   startChips();
-  startPreview();
+  startZoom();
   startTide();
 }
