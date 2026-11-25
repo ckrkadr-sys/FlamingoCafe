@@ -68,7 +68,12 @@ body { background: var(--c-bg); color: var(--c-fg); line-height: 1.55; }
   position: sticky; top: 0; z-index: var(--z-header); height: var(--hdr);
   display: flex; align-items: center; justify-content: space-between; gap: var(--u);
   padding-inline: var(--gutter); background: var(--c-bg); border-bottom: 1px solid transparent;
-  transition: border-color 0.4s;
+  transition: border-color 0.4s; container: hdr / inline-size;
+}
+/* Brand + nav need ~22.5rem: on narrower headers (small phones, enlarged text) the word gives way
+   so the row never pushes the page wider than the screen. Visually hidden only: it names the home link. */
+@container hdr (width < 22.5rem) {
+  .brand__name { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .brand { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; }
@@ -236,7 +241,7 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .msec { padding-block: clamp(3.5rem, 8vw, 7rem); border-top: 1.5px solid var(--ink); scroll-margin-top: calc(var(--hdr) + var(--nav, 6rem)); }
 .msec:first-of-type { border-top: 0; }
 .msec__head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2em 0.6em; margin-bottom: calc(var(--u) * 3); }
-.msec__title { font-size: var(--t-xl); }
+.msec__title { font-size: var(--t-xl); overflow-wrap: anywhere; } /* one-word titles (Atıştırmalıklar) on small phones / large text */
 /* German and Russian run longer: titles a size down, long words hyphenate or break instead of overflowing. */
 .msec__title:is(:lang(de), :lang(ru)) { font-size: clamp(2.2rem, 1.2rem + 4.4vw, 5.5rem); }
 :is(.msec__title, .item h3, .mend__big):is(:lang(de), :lang(ru)) { hyphens: auto; overflow-wrap: break-word; }
