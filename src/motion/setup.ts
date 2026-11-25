@@ -30,20 +30,30 @@ function startReflection() {
   const move = (e: PointerEvent) => { aim.x = e.clientX / innerWidth - 0.5; };
   if (!isTouch()) addEventListener('pointermove', move, { passive: true });
   onPage(() => {
-    const el = document.querySelector<HTMLElement>('[data-reflect] .mark');
-    if (!el) return;
+    const els = gsap.utils.toArray<HTMLElement>('[data-reflect] .mark');
+    if (!els.length) return;
     const tick = (t: number) => {
       cur.x += (aim.x - cur.x) * (1 - Math.pow(0.94, gsap.ticker.deltaRatio()));
-      gsap.set(el, { skewX: Math.sin(t * 0.7) * 2.2 + cur.x * 6, scaleX: 1 + Math.sin(t * 0.45) * 0.015 });
-      el.style.setProperty('mask-position', `center, 0 ${(t * 6) % 8}px`);
-      el.style.setProperty('-webkit-mask-position', `center, 0 ${(t * 6) % 8}px`);
+      gsap.set(els, { skewX: Math.sin(t * 0.7) * 2.2 + cur.x * 6, scaleX: 1 + Math.sin(t * 0.45) * 0.015 });
+      for (const el of els) {
+        el.style.setProperty('mask-position', `center, 0 ${(t * 6) % 8}px`);
+        el.style.setProperty('-webkit-mask-position', `center, 0 ${(t * 6) % 8}px`);
+      }
     };
-    const st = ScrollTrigger.create({
-      trigger: el.closest('[data-reflect]')!, start: 'top bottom', end: 'bottom top',
-      onToggle: (s) => (s.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
+    // Phones show the reflection under the bird, wider screens the one under the water line (the other is display: none):
+    // the trigger is whichever one this layout shows, picked again when the layout switches.
+    const mm = gsap.matchMedia();
+    mm.add({ phone: '(max-width: 767px)', wide: 'not all and (max-width: 767px)' }, () => {
+      const box = els.map((el) => el.parentElement!).find((r) => r.offsetHeight > 0);
+      if (!box) return;
+      const st = ScrollTrigger.create({
+        trigger: box, start: 'top bottom', end: 'bottom top',
+        onToggle: (s) => (s.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
+      });
+      if (st.isActive) gsap.ticker.add(tick);
+      return () => gsap.ticker.remove(tick);
     });
-    if (st.isActive) gsap.ticker.add(tick);
-    return () => { gsap.ticker.remove(tick); st.kill(); };
+    return () => { gsap.ticker.remove(tick); mm.revert(); };
   });
 }
 

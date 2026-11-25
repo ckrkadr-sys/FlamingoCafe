@@ -142,6 +142,8 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
   mask-image: url('/flamingo.png'), repeating-linear-gradient(#000 0 5px, transparent 5px 8px);
   -webkit-mask-composite: source-in; mask-composite: intersect; -webkit-mask-size: contain, 100% 8px; mask-size: contain, 100% 8px;
   -webkit-mask-repeat: no-repeat, repeat; mask-repeat: no-repeat, repeat; -webkit-mask-position: center, 0 0; mask-position: center, 0 0; }
+/* Phones: the text sits under the bird, so the reflection moves into the stage, right under the feet (the one below the water line hides). */
+.hero__reflect--phone { display: none; }
 .hero__body { align-self: stretch; padding-top: calc(var(--u) * 4); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; position: relative; z-index: 2; }
 .hero__facts { grid-column: 1 / span 5; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto auto; height: 100%; gap: calc(var(--u) * 2); }
 .hero__facts p { font-size: var(--t-body); max-width: 30ch; }
@@ -149,10 +151,14 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .hero__hours { font-variant-numeric: tabular-nums; font-weight: 600; }
 @media (max-width: 767px) {
   .hero { min-height: auto; grid-template-rows: auto auto auto; }
-  .hero__stage { position: relative; right: auto; width: 56vw; margin: calc(var(--u) * 2) auto 0; }
+  .hero__stage { position: relative; right: auto; width: 46vw; margin: calc(var(--u) * 2) auto 0; } /* 46vw: bird + reflection + both buttons fit 390x844 and 360x800 */
   .hero__body { display: block; margin-top: calc(var(--u) * 3); order: 3; }
-  .hero__reflect-wrap { justify-content: center; padding-right: 0; }
-  .hero__reflect { width: 56vw; height: calc(56vw * 1.255 * 0.42); }
+  .hero__reflect-wrap { display: none; }
+  /* Box = the flipped bird's visible height (0.42 of 452/360), so no ghost space under it; fades out downwards. */
+  .hero__reflect--phone { display: flow-root; width: 100%; height: auto; min-height: 0; aspect-ratio: 360 / 189.84;
+    -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+  /* The flipped mask leaves a faint full-width edge row at the feet: lift it 1px into the clip (margin, not translate: GSAP owns the transform). */
+  .hero__reflect--phone .mark { margin-top: -1px; }
   .hero__cta .btn { flex: 1 1 auto; justify-content: center; }
 }
 
