@@ -71,8 +71,9 @@ function startChips() {
       root().style.setProperty('--groups-h', `${bar.clientTop + groupRow.offsetHeight}px`);
     });
     sizeObs.observe(bar);
-    // Stop above a section by the bar's own sticky top (the header on desktop, 0 or less on phones) plus its height.
-    const offset = () => parseFloat(getComputedStyle(bar).top) + bar.offsetHeight - 1;
+    // Stop above a section by the bar's own sticky top (the header; less in phone landscape) plus its height.
+    const stickTop = () => parseFloat(getComputedStyle(bar).top);
+    const offset = () => stickTop() + bar.offsetHeight - 1;
     // Phones (CSS applies [data-compact] below 768px): reading down slides the group row away, scrolling up brings it back.
     // A jump to a section keeps it open until the reader touches, wheels or types again.
     const title = bar.previousElementSibling as HTMLElement; // while the page title shows, the bar is not stuck yet
@@ -81,7 +82,7 @@ function startChips() {
     const offScroll = onScroll(({ y }) => {
       const dy = y - lastY;
       lastY = y;
-      if (held || title.getBoundingClientRect().bottom > 0) { travel = 0; compact(false); return; }
+      if (held || title.getBoundingClientRect().bottom > stickTop()) { travel = 0; compact(false); return; }
       travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy; // 24px of travel one way before it flips: no flicker
       if (travel > 24) compact(true);
       else if (travel < -24) compact(false);

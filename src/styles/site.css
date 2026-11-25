@@ -250,11 +250,10 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .chips__row a:not([aria-current]):focus-visible { background: var(--pink); }
 @media (hover: hover) { .chips__row a[aria-current]:hover { background: var(--pink); color: var(--ink); } }
 .chips .dip { line-height: 1.2; }
-/* Phones: the header scrolls away; the bar sticks to the top and its group row slides off while reading down
+/* Phones: the header stays; the bar sticks under it and its group row slides off (under the header) while reading down
    (JS sets [data-compact]; translate, not height, so nothing under the bar moves). --groups-h is written by JS. */
 @media (max-width: 767px) {
-  html[data-page='menu'] .hdr { position: relative; }
-  .chips { top: 0; transition: translate 0.35s var(--e-out); }
+  .chips { transition: translate 0.35s var(--e-out); }
   .chips[data-compact] { translate: 0 calc(var(--groups-h, 0px) * -1); }
   /* 44px touch areas, same look, same bar height: 1.6px moves from under the chips to the group row. */
   .chips .chips__groups { padding-top: 0; }
@@ -265,10 +264,9 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
   .chips__row a::after { content: ''; position: absolute; inset: -5px 0; } /* the row's 4.8px bottom padding trims the lower edge */
 }
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) { .chips { transition: none; } }
-/* Phones in landscape: only the chip row sticks (the group row and the header scroll away). */
+/* Phones in landscape: the header and the chip row stick (the group row scrolls away under the header). */
 @media (max-height: 500px) and (pointer: coarse) {
-  html[data-page='menu'] .hdr { position: relative; }
-  .chips { top: calc(var(--groups-h, 0px) * -1); }
+  .chips { top: calc(var(--hdr) - var(--groups-h, 0px)); }
   .chips[data-compact] { translate: none; }
 }
 
@@ -308,7 +306,7 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 }
 @media (max-width: 767px) {
   .msec--plain .items { columns: 1; }
-  .msec { padding-block: 2.25rem; scroll-margin-top: var(--nav, 6rem); }
+  .msec { padding-block: 2.25rem; }
   /* Longest one-word title ("Atıştırmalıklar") is 7.66em wide: 7.9 keeps it on one line; only shrinks when it must. */
   .msec__title { --fit: calc((100vw - 2 * var(--gutter)) / 7.9); font-size: clamp(1.75rem, var(--fit), var(--t-xl)); }
   .msec__title:is(:lang(de), :lang(ru)) { font-size: clamp(1.75rem, var(--fit), clamp(2.2rem, 1.2rem + 4.4vw, 5.5rem)); }
@@ -321,7 +319,7 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
   .item--thumb .item__zoom { grid-row: 1 / -1; align-self: center; }
 }
 /* After the phone block: small landscape phones match both. */
-@media (max-height: 500px) and (pointer: coarse) { .msec { scroll-margin-top: calc(var(--nav, 6rem) - var(--groups-h, 0px)); } }
+@media (max-height: 500px) and (pointer: coarse) { .msec { scroll-margin-top: calc(var(--hdr) + var(--nav, 6rem) - var(--groups-h, 0px)); } }
 
 /* Thumbnail dialog: the whole photo, contained. */
 .zoom { padding: 0; border: 0; margin: auto; background: var(--sand); overflow: visible; max-width: none; max-height: none; }
