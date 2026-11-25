@@ -295,11 +295,12 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 /* Cutout thumbnails: the whole dish, uncropped, with the section photos' soft shadow. */
 .item__zoom--cutout { overflow: visible; }
 .item__zoom--cutout img { object-fit: contain; filter: drop-shadow(0 6px 8px rgb(35 33 34 / 0.14)) drop-shadow(0 1px 2px rgb(35 33 34 / 0.08)); }
-@media (max-width: 767px) {
-  .msec__photo { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 3); }
-  /* Whole photo, never cropped, small enough that the title and the first dishes share the screen. */
-  .msec__photo img { max-height: 40svh; object-position: center; }
+/* Phones (portrait and landscape): no section photos, the list right under the title. Same media as the <source> in MenuPage.astro. */
+@media (max-width: 767px), (pointer: coarse) and (max-height: 500px) {
+  .msec__photo { display: none; }
   .items { grid-column: 1 / -1; }
+}
+@media (max-width: 767px) {
   .msec--plain .items { columns: 1; }
   .msec { padding-block: 2.25rem; scroll-margin-top: var(--nav, 6rem); }
   /* Longest one-word title ("Atıştırmalıklar") is 7.66em wide: 7.9 keeps it on one line; only shrinks when it must. */

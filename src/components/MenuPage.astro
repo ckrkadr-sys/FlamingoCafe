@@ -53,7 +53,11 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
         {s.note && <p class="msec__note">{p(s.note)}</p>}
         {s.photo && (
           <figure class:list={['msec__photo', { 'msec__photo--cutout': cutouts.has(s.photo) }]}>
-            <Image src={photo(cutouts.has(s.photo) ? `${s.photo}-cutout` : s.photo)} alt={altFor(s.photo, p(s.title))} format="webp" widths={[480, 800, 1100]} sizes="(max-width: 767px) calc(100vw - 2rem), 40vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
+            {/* Phones hide section photos (site.css); this inline pixel keeps them from downloading at all, the eager first one included. Same media as the CSS. */}
+            <picture>
+              <source media="(max-width: 767px), (pointer: coarse) and (max-height: 500px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
+              <Image src={photo(cutouts.has(s.photo) ? `${s.photo}-cutout` : s.photo)} alt={altFor(s.photo, p(s.title))} format="webp" widths={[480, 800, 1100]} sizes="40vw" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : undefined} />
+            </picture>
           </figure>
         )}
         <ul class="items">
