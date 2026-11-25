@@ -54,10 +54,34 @@ function startChips() {
     if (!bar) return;
     const rows = [...bar.querySelectorAll<HTMLElement>('[data-row]')];
     const lists = [...bar.querySelectorAll<HTMLElement>('ul')];
-    // Sticky offsets (photo top, scroll-margin) follow the bar's real height.
-    const sizeObs = new ResizeObserver(() => root().style.setProperty('--nav', `${bar.offsetHeight}px`));
+    const groupRow = bar.querySelector<HTMLElement>('.chips__groups')!;
+    // Sticky offsets (scroll-margin, the phone group row's slide) follow the bar's real size.
+    const sizeObs = new ResizeObserver(() => {
+      root().style.setProperty('--nav', `${bar.offsetHeight}px`);
+      root().style.setProperty('--groups-h', `${bar.clientTop + groupRow.offsetHeight}px`);
+    });
     sizeObs.observe(bar);
-    const offset = () => (parseFloat(getComputedStyle(root()).getPropertyValue('--hdr')) || 4) * 16 + bar.offsetHeight - 1;
+    // Stop above a section by the bar's own sticky top (the header on desktop, 0 or less on phones) plus its height.
+    const offset = () => parseFloat(getComputedStyle(bar).top) + bar.offsetHeight - 1;
+    // Phones (CSS applies [data-compact] below 768px): reading down slides the group row away, scrolling up brings it back.
+    // A jump to a section keeps it open until the reader touches, wheels or types again.
+    const title = bar.previousElementSibling as HTMLElement; // while the page title shows, the bar is not stuck yet
+    let lastY = scrollState().y, travel = 0, held = false;
+    const compact = (on: boolean) => bar.toggleAttribute('data-compact', on);
+    const offScroll = onScroll(({ y }) => {
+      const dy = y - lastY;
+      lastY = y;
+      if (held || title.getBoundingClientRect().bottom > 0) { travel = 0; compact(false); return; }
+      travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy; // 24px of travel one way before it flips: no flicker
+      if (travel > 24) compact(true);
+      else if (travel < -24) compact(false);
+    });
+    const hold = () => { held = true; compact(false); };
+    const release = () => { held = false; travel = 0; };
+    const inputs = ['touchstart', 'wheel', 'keydown'] as const;
+    inputs.forEach((t) => addEventListener(t, release, { passive: true }));
+    const open = () => compact(false);
+    bar.addEventListener('focusin', open);
     // Right-edge fade only while a row has more to scroll.
     const fade = (ul: HTMLElement) => ul.toggleAttribute('data-more', ul.scrollLeft + ul.clientWidth < ul.scrollWidth - 2);
     const onListScroll = (e: Event) => fade(e.currentTarget as HTMLElement);
@@ -82,6 +106,7 @@ function startChips() {
     const sections = [...document.querySelectorAll<HTMLElement>('[data-section]')];
     let cur: HTMLElement | undefined;
     const track = () => {
+      if (held) return; // after a jump the chosen section stays current (a short one may sit above the line) until the reader moves
       const line = innerHeight * 0.45;
       let s = sections[0];
       for (const el of sections) if (el.getBoundingClientRect().top <= line) s = el;
@@ -90,21 +115,27 @@ function startChips() {
     const io = new IntersectionObserver(track, { rootMargin: '0px 0px -55% 0px' });
     sections.forEach((s) => io.observe(s));
     track();
+    const jump = (hash: string, immediate = false) => {
+      const s = document.querySelector<HTMLElement>(hash);
+      if (!s) return;
+      hold();
+      if (s.matches('[data-section]') && s !== cur) setCurrent((cur = s));
+      requestAnimationFrame(() => scrollToTarget(s, { offset: offset(), immediate })); // after the bar has opened
+    };
     const click = (e: Event) => {
       const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!a) return;
       e.preventDefault();
       const hash = a.getAttribute('href')!;
-      scrollToTarget(hash, { offset: offset() });
+      jump(hash);
       history.replaceState(history.state, '', hash);
     };
     bar.addEventListener('click', click);
     // Arriving from the home index with a hash: land on that section under the sticky bars.
-    if (location.hash && document.querySelector(location.hash)) {
-      requestAnimationFrame(() => scrollToTarget(location.hash, { offset: offset(), immediate: true }));
-    }
+    if (location.hash) jump(location.hash, true);
     return () => {
       bar.removeEventListener('click', click); io.disconnect(); sizeObs.disconnect();
+      offScroll(); inputs.forEach((t) => removeEventListener(t, release)); bar.removeEventListener('focusin', open);
       lists.forEach((ul) => ul.removeEventListener('scroll', onListScroll));
     };
   });

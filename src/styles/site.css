@@ -93,6 +93,13 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .nav__tel::before { content: ''; position: absolute; inset: -20% -10%; z-index: -1; border-radius: 45% 45% 0 0 / 40% 40% 0 0; background: var(--ink); translate: 0 105%; transition: translate 0.55s var(--e-dip), border-radius 0.55s var(--e-dip); }
 @media (hover: hover) { .nav__tel:hover { color: var(--sand); } .nav__tel:hover::before { translate: 0 0; border-radius: 0; } }
 .nav__tel:focus-visible { color: var(--sand); } .nav__tel:focus-visible::before { translate: 0 0; border-radius: 0; }
+/* Touch phones: no hover tide, so the pill need not clip; ::after grows the tap area to 44px without growing the pill. */
+@media (max-width: 767px) and (hover: none) {
+  .nav a.nav__tel { overflow: visible; }
+  .nav__tel::before { content: none; }
+  .nav__tel:focus-visible { color: inherit; }
+  .nav__tel::after { content: ''; position: absolute; inset: -3px 0; }
+}
 /* Language switcher (menu pages only): the active language underlined like the current page. */
 .langs { position: relative; }
 .langs__toggle { display: none; }
@@ -237,6 +244,27 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .chips__row a:not([aria-current]):focus-visible { background: var(--pink); }
 @media (hover: hover) { .chips__row a[aria-current]:hover { background: var(--pink); color: var(--ink); } }
 .chips .dip { line-height: 1.2; }
+/* Phones: the header scrolls away; the bar sticks to the top and its group row slides off while reading down
+   (JS sets [data-compact]; translate, not height, so nothing under the bar moves). --groups-h is written by JS. */
+@media (max-width: 767px) {
+  html[data-page='menu'] .hdr { position: relative; }
+  .chips { top: 0; transition: translate 0.35s var(--e-out); }
+  .chips[data-compact] { translate: 0 calc(var(--groups-h, 0px) * -1); }
+  /* 44px touch areas, same look, same bar height: 1.6px moves from under the chips to the group row. */
+  .chips .chips__groups { padding-top: 0; }
+  .chips__groups a { position: relative; min-height: 44px; padding-top: 0.4rem; }
+  .chips__groups a::after { content: ''; position: absolute; inset: 0 -0.625rem; } /* half the 1.25rem gap each side */
+  .chips .chips__row { padding-bottom: 0.3rem; }
+  .chips__row a { position: relative; }
+  .chips__row a::after { content: ''; position: absolute; inset: -5px 0; } /* the row's 4.8px bottom padding trims the lower edge */
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) { .chips { transition: none; } }
+/* Phones in landscape: only the chip row sticks (the group row and the header scroll away). */
+@media (max-height: 500px) and (pointer: coarse) {
+  html[data-page='menu'] .hdr { position: relative; }
+  .chips { top: calc(var(--groups-h, 0px) * -1); }
+  .chips[data-compact] { translate: none; }
+}
 
 .msec { padding-block: clamp(3.5rem, 8vw, 7rem); border-top: 1.5px solid var(--ink); scroll-margin-top: calc(var(--hdr) + var(--nav, 6rem)); }
 .msec:first-of-type { border-top: 0; }
@@ -268,14 +296,25 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .item__zoom--cutout { overflow: visible; }
 .item__zoom--cutout img { object-fit: contain; filter: drop-shadow(0 6px 8px rgb(35 33 34 / 0.14)) drop-shadow(0 1px 2px rgb(35 33 34 / 0.08)); }
 @media (max-width: 767px) {
-  .item { --thumb: 5rem; }
   .msec__photo { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 3); }
-  .msec__photo img { max-height: none; }
-  /* Trimmed cutouts can be very tall (the wine glass): keep them within the screen, centred. */
-  .msec__photo--cutout img { max-height: 60svh; object-position: center top; }
+  /* Whole photo, never cropped, small enough that the title and the first dishes share the screen. */
+  .msec__photo img { max-height: 40svh; object-position: center; }
   .items { grid-column: 1 / -1; }
   .msec--plain .items { columns: 1; }
+  .msec { padding-block: 2.25rem; scroll-margin-top: var(--nav, 6rem); }
+  /* Longest one-word title ("Atıştırmalıklar") is 7.66em wide: 7.9 keeps it on one line; only shrinks when it must. */
+  .msec__title { --fit: calc((100vw - 2 * var(--gutter)) / 7.9); font-size: clamp(1.75rem, var(--fit), var(--t-xl)); }
+  .msec__title:is(:lang(de), :lang(ru)) { font-size: clamp(1.75rem, var(--fit), clamp(2.2rem, 1.2rem + 4.4vw, 5.5rem)); }
+  .item p { font-size: 0.9375rem; }
+  /* Landscape thumbnails (wide plates stay readable); text centred beside them, no empty space under a bare name. */
+  .item__zoom { width: 6rem; height: 4.5rem; }
+  .item--thumb { grid-template-rows: 1fr auto auto 1fr; row-gap: 0; }
+  .item--thumb h3 { grid-row: 2; }
+  .item--thumb p { grid-row: 3; margin-top: 0.25rem; }
+  .item--thumb .item__zoom { grid-row: 1 / -1; align-self: center; }
 }
+/* After the phone block: small landscape phones match both. */
+@media (max-height: 500px) and (pointer: coarse) { .msec { scroll-margin-top: calc(var(--nav, 6rem) - var(--groups-h, 0px)); } }
 
 /* Thumbnail dialog: the whole photo, contained. */
 .zoom { padding: 0; border: 0; margin: auto; background: var(--sand); overflow: visible; max-width: none; max-height: none; }
