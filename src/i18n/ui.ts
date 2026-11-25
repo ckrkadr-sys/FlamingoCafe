@@ -24,7 +24,6 @@ export const ui = {
   'nav.lang': { tr: 'Dil', en: 'Language', ru: 'Язык', de: 'Sprache' },
   'ld.cuisine': { tr: 'Kahvaltı, Burger, Makarna, Kahve, Kokteyl', en: 'Breakfast, Burgers, Pasta, Coffee, Cocktails', ru: 'Завтраки, Бургеры, Паста, Кофе, Коктейли', de: 'Frühstück, Burger, Pasta, Kaffee, Cocktails' },
   'foot.big': { tr: 'Gece yarısına kadar buradayız.', en: 'We’re here until midnight.', ru: 'Мы открыты до полуночи.', de: 'Wir sind bis Mitternacht für Sie da.' },
-  'foot.prices': { tr: 'Fiyatları masada sorabilirsiniz.', en: 'Ask for prices at your table.', ru: 'Цены уточняйте у официанта.', de: 'Die Preise erfahren Sie am Tisch.' },
 
   'menu.title': { tr: 'Menü', en: 'Menu', ru: 'Меню', de: 'Speisekarte' },
   'menu.description': {
