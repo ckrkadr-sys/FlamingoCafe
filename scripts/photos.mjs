@@ -9,7 +9,6 @@ const out = 'src/assets/food';
 
 // source file → slug used in src/data/menu.ts
 const map = {
-  '-omlet-mantarli-kasarli.png': 'omlet-mantarli-kasarli',
   'Avokadolu omlet.png': 'omlet-avokado',
   'chili burger.png': 'chili-burger',
   'citir-tavuk-burger.png': 'citir-tavuk-burger',
@@ -18,7 +17,6 @@ const map = {
   'fish and chips.png': 'fish-chips',
   'iki kişilik kahvaltı.png': 'kahvalti-iki-kisilik',
   'kahvalti-menemen.png': 'menemen',
-  'kahvalti-omlet-peynirli.png': 'omlet-peynirli',
   'kahvalti-pancake.png': 'pankek-kahvalti',
   'kahvalti-pisi-tabagi.png': 'pisi-tabagi',
   'kahvalti-sahanda-izgara-sucuk.png': 'sahanda-sucuk',

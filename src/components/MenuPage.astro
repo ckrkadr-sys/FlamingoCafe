@@ -68,8 +68,8 @@ const full = Object.fromEntries(await Promise.all([...thumbs].map(async (p) => [
               {i.photo && (
                 <button class:list={['item__zoom', { 'item__zoom--cutout': cutouts.has(i.photo) }]} type="button" aria-label={t('menu.zoom', locale).replace('{name}', p(i.name))} data-full={full[i.photo].src} data-alt={p(i.name)} data-w={full[i.photo].attributes.width} data-h={full[i.photo].attributes.height}>
                   {cutouts.has(i.photo)
-                    ? <Image src={photo(`${i.photo}-cutout`)} alt="" widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />
-                    : <Image src={photo(i.photo)} alt="" width={224} height={224} widths={[112, 160, 224]} sizes="(max-width: 767px) 80px, 112px" format="webp" loading="lazy" />}
+                    ? <Image src={photo(`${i.photo}-cutout`)} alt="" widths={[112, 160, 224, 288]} sizes="(max-width: 767px) 96px, 112px" format="webp" loading="lazy" />
+                    : <Image src={photo(i.photo)} alt="" width={224} height={224} widths={[112, 160, 224, 288]} sizes="(max-width: 767px) 96px, 112px" format="webp" loading="lazy" />}
                 </button>
               )}
             </li>
