@@ -2,8 +2,7 @@
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
-import { menu } from '../data/menu';
-import { photo } from '../data/photos';
+import { photo, cutouts } from '../data/photos';
 
 // The menu as one day on the beach: morning plates first, the last cocktail at midnight.
 const day = [
@@ -19,10 +18,10 @@ const day = [
 ];
 const rows = await Promise.all(
   day.map(async (d, i) => {
-    const count = menu.filter((s) => d.ids.includes(s.id)).reduce((n, s) => n + s.items.length, 0);
-    // Drinks have no photos yet: those rows show no preview.
-    const preview = d.img ? (await getImage({ src: photo(d.img), width: 480, format: 'webp' })).src : undefined;
-    return { ...d, href: `/menu/#${d.ids[0]}`, count, preview, tint: `${Math.round((i / (day.length - 1)) * 100)}%` };
+    // Drinks have no photos yet: those rows show no thumbnail. Others use the background-free cutout (webp keeps the alpha).
+    const cutout = !!d.img && cutouts.has(d.img);
+    const thumb = d.img ? await getImage({ src: photo(cutout ? `${d.img}-cutout` : d.img), widths: [160, 240, 360], format: 'webp' }) : undefined;
+    return { ...d, href: `/menu/#${d.ids[0]}`, thumb, cutout, tint: `${Math.round((i / (day.length - 1)) * 100)}%` };
   }),
 );
 ---
@@ -72,13 +71,13 @@ const rows = await Promise.all(
       <p class="muted">Kahvaltı gün boyu var. Sıra, günün sırası.</p>
     </div>
     <ul class="day__list">
-      {rows.map((r) => (
+      {rows.map((r, n) => (
         <li>
           <a class="row" href={r.href} style={`--tint:${r.tint}`}>
             <span class="row__dot" aria-hidden="true"></span>
             <span class="row__name"><span class="dip"><span>{r.name}</span><span aria-hidden="true">{r.name}</span></span></span>
-            <span class="row__meta">{r.count} çeşit</span>
-            {r.preview && <img class="row__thumb" src={r.preview} alt="" width="72" height="72" loading="lazy" decoding="async" />}
+            {/* sizes: 4.5rem box on phones and touch screens, at most 7.8rem wide elsewhere (see .row__thumb) */}
+            {r.thumb && <img class:list={['row__thumb', { 'row__thumb--cutout': r.cutout }]} src={r.thumb.src} srcset={r.thumb.srcSet.attribute} sizes="(max-width: 767px) 72px, (hover: none) 72px, (pointer: coarse) 72px, 7.8rem" alt="" width="72" height="72" loading={n === 0 ? 'eager' : 'lazy'} decoding="async" />}
           </a>
         </li>
       ))}

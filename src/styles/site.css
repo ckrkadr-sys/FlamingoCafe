@@ -180,16 +180,18 @@ html.scrolled .hdr { border-bottom-color: var(--c-line); }
 .row { display: grid; grid-template-columns: 4rem 1fr auto; align-items: center; gap: var(--gutter); padding-block: clamp(0.9rem, 1.8vw, 1.5rem); }
 .row__dot { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: color-mix(in oklab, var(--sand), var(--pink) var(--tint)); outline: 1.5px solid var(--ink); justify-self: start; transition: scale 0.45s var(--e-dip); }
 .row__name { font-family: var(--f-display); font-size: var(--t-l); line-height: 1; letter-spacing: -0.01em; }
-.row__meta { font-size: var(--t-s); color: var(--c-muted); text-align: right; font-variant-numeric: tabular-nums; }
-.row__thumb { display: none; }
+/* 1.6x the title, 3:2; the negative margins keep it inside the row padding, so rows keep the height of the title alone
+   (the extra 1px absorbs layout rounding that would otherwise grow each row by a fraction of a pixel). */
+.row__thumb { grid-column: 3; width: auto; height: calc(var(--t-l) * 1.6); aspect-ratio: 3 / 2; margin-block: calc(var(--t-l) * -0.3 - 1px); object-fit: cover; }
 @media (hover: hover) { .row:hover .row__dot { scale: 1.8; } }
 .row:focus-visible .row__dot { scale: 1.8; }
 @media (hover: none), (pointer: coarse), (max-width: 767px) {
   .row { grid-template-columns: 1fr 4.5rem; gap: var(--u); }
   .row__dot { display: none; }
-  .row__meta { grid-column: 1; grid-row: 2; text-align: left; }
-  .row__thumb { display: block; grid-column: 2; grid-row: 1 / span 2; width: 4.5rem; aspect-ratio: 1; object-fit: cover; }
+  .row__thumb { grid-column: 2; grid-row: 1; width: 4.5rem; height: 4.5rem; margin-block: 0; aspect-ratio: 1; }
 }
+/* Cutouts fit whole and centred in their box, shadowed like the /menu thumbnails. */
+.row__thumb--cutout { object-fit: contain; filter: drop-shadow(0 6px 8px rgb(35 33 34 / 0.14)) drop-shadow(0 1px 2px rgb(35 33 34 / 0.08)); }
 
 /* ── Visit ── */
 .visit { padding-block: clamp(4rem, 10vw, 8rem); }
