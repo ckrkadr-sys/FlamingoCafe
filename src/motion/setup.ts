@@ -161,8 +161,11 @@ function startZoom() {
     const open = (e: Event) => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-full]');
       if (!b) return;
+      img.removeAttribute('src'); // else the previous photo stays (and sizes the box) until the new one loads
       img.width = +b.dataset.w!; img.height = +b.dataset.h!;
+      img.style.setProperty('--r', String(+b.dataset.w! / +b.dataset.h!));
       img.alt = b.dataset.alt!; img.src = b.dataset.full!;
+      dlg.classList.toggle('zoom--cutout', b.classList.contains('item__zoom--cutout'));
       stopScroll();
       dlg.showModal();
     };
