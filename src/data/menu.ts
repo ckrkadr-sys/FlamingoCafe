@@ -48,7 +48,7 @@ export const menu: Section[] = [
     id: 'tost', title: { tr: 'Tost ve sandviç', en: 'Toasties & sandwiches', ru: 'Тосты и сэндвичи', de: 'Toasts & Sandwiches' }, photo: 'flamingo-tost',
     items: [
       { name: { tr: 'Kaşarlı tost', en: 'Kaşar cheese toast', ru: 'Тост с сыром кашар', de: 'Toast mit Kaşar-Käse' }, photo: 'kasarli-tost' },
-      { name: { tr: 'Peynirli tost', en: 'White cheese toast', ru: 'Тост с белым сыром', de: 'Toast mit Weißkäse' },
+      { name: { tr: 'Peynirli tost', en: 'White cheese toast', ru: 'Тост с белым сыром', de: 'Toast mit Weißkäse' }, photo: 'peynirli-tost',
         desc: { tr: 'Domates ve kekikli', en: 'With tomatoes and thyme', ru: 'С помидорами и тимьяном', de: 'Mit Tomaten und Thymian' } },
       { name: { tr: 'Karışık tost', en: 'Mixed toast', ru: 'Тост ассорти', de: 'Gemischter Toast' }, photo: 'karisik-tost' },
       { name: { tr: 'Glutensiz tost', en: 'Gluten-free toast', ru: 'Тост без глютена', de: 'Glutenfreier Toast' } },
